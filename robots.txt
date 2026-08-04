@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://aerovillas.in/sitemap.xml
