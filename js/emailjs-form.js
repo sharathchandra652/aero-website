@@ -1,26 +1,19 @@
 /**
  * Aero Villas – Form Email Sender
  * ────────────────────────────────────────────────────────────────
- * Sends lead/enquiry data to the local SMTP mailer server.
- * The mailer server (mailer/server.js) forwards it as an email
- * to sales@aerovillas.in using your own SMTP credentials.
- *
- * Change MAILER_URL if your backend is hosted on a different URL/port.
+ * Sends lead/enquiry data to the SMTP mailer serverless API.
+ * In production on Vercel, it calls /api/send-email.
+ * During local dev (localhost), it calls http://localhost:3001/send-email.
  * ────────────────────────────────────────────────────────────────
  */
 
-// URL of the mailer backend.
-// In production, point this to your hosted server, e.g.:
-//   "https://mail.aerovillas.in/send-email"
-//   "https://aerovillas.in:3001/send-email"
-// During local dev it defaults to localhost:3001
-const MAILER_URL = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+const MAILER_URL = (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
   ? "http://localhost:3001/send-email"
-  : "https://mail.aerovillas.in/send-email"; // ← UPDATE THIS for production
+  : "/api/send-email";
 
 /**
- * Send a lead notification email via the SMTP mailer server.
- * Silently logs errors to console — never blocks the UI.
+ * Send a lead notification email via the SMTP mailer API.
+ * Dispatches the email notification asynchronously without blocking the user form submission UI.
  *
  * @param {Object} params
  *   @param {string} params.name       - Visitor's full name
@@ -44,11 +37,15 @@ function sendLeadEmail(params) {
     }),
   })
     .then((res) => {
-      if (!res.ok) throw new Error(`Server responded ${res.status}`);
-      console.log("✅ Email notification sent to sales@aerovillas.in");
+      if (!res.ok) {
+        console.warn("⚠️ Email notification API status:", res.status);
+      } else {
+        console.log("✅ Email notification sent to sales@aerovillas.in");
+      }
+      return res.json().catch(() => ({}));
     })
     .catch((err) => {
-      // Non-blocking — the CRM lead is still saved even if email fails
-      console.error("⚠️ Email notification failed:", err.message);
+      console.warn("⚠️ Email notification dispatch warning:", err.message);
+      return {};
     });
 }

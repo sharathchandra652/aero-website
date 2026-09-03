@@ -752,6 +752,21 @@ Telangana 501218
 </script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
+  function setLoading(btn, isLoading, loadingText = "Submitting...") {
+    if (!btn) return;
+    if (isLoading) {
+      btn.dataset.origText = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = loadingText;
+    } else {
+      btn.disabled = false;
+      if (btn.dataset.origText) btn.innerHTML = btn.dataset.origText;
+    }
+  }
+
+  const userErrorMsg = "Unable to submit your request right now. Please try again or contact our team directly.";
+  const userSuccessMsg = "Your form has been submitted successfully. Our team will contact you shortly.";
+
   // === Brochure Form ===
   const brochureForm = document.getElementById("brochureForm");
   const brochureSubmitBtn = brochureForm?.querySelector("button[type='submit']");
@@ -780,6 +795,8 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
+    setLoading(brochureSubmitBtn, true, "Downloading...");
+
     const data = {
       property: "Aero Villas",
       name,
@@ -801,20 +818,29 @@ document.addEventListener("DOMContentLoaded", function () {
       fundingSource: ""
     };
 
-    fetch("https://portal-api.clove.build/api/tpi/website/lead", {
+    const crmPromise = fetch("https://portal-api.clove.build/api/tpi/website/lead", {
       method: "POST",
       headers: {
         "x-api-key": "r3U2RJQOi+V1OMGKqzPJRyH0J9+3cjFY",
         "Content-Type": "application/json"
       },
       body: JSON.stringify(data)
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error("Submission failed");
-        return res.json();
-      })
+    }).then((res) => {
+      if (!res.ok) throw new Error("CRM submission failed");
+      return res.json();
+    });
+
+    const emailPromise = sendLeadEmail({
+      name,
+      phone,
+      email: "",
+      interested: interest,
+      message,
+      sourcePage: "Brochure Download Modal – 567 Sq.Yds Page"
+    });
+
+    Promise.all([crmPromise, emailPromise])
       .then(() => {
-        // Trigger brochure download
         const link = document.createElement("a");
         link.href = "images/Aero Villas Brochure 2025 Final.pdf";
         link.download = "Aero-Villas-Brochure.pdf";
@@ -823,18 +849,21 @@ document.addEventListener("DOMContentLoaded", function () {
         document.body.removeChild(link);
 
         brochureForm.reset();
-
         const modalInstance = bootstrap.Modal.getInstance(brochureModal);
         if (modalInstance) setTimeout(() => modalInstance.hide(), 500);
       })
       .catch((err) => {
-        alert("Sorry, there was an error sending your form. Please try again.");
         console.error("Brochure form error:", err);
+        alert(userErrorMsg);
+      })
+      .finally(() => {
+        setLoading(brochureSubmitBtn, false);
       });
   });
 
   // === Booking Form ===
   const bookingForm = document.getElementById("booking_form");
+  const bookingSubmitBtn = bookingForm?.querySelector("button[type='submit']");
   const successMessage = document.getElementById("success_message_col");
   const errorMessage = document.getElementById("error_message");
   let messageTimeout;
@@ -842,15 +871,15 @@ document.addEventListener("DOMContentLoaded", function () {
   function showTempMessage(type) {
     clearTimeout(messageTimeout);
     if (type === "success") {
-      successMessage.style.display = "block";
-      errorMessage.style.display = "none";
+      if (successMessage) successMessage.style.display = "block";
+      if (errorMessage) errorMessage.style.display = "none";
     } else {
-      errorMessage.style.display = "block";
-      successMessage.style.display = "none";
+      if (errorMessage) errorMessage.style.display = "block";
+      if (successMessage) successMessage.style.display = "none";
     }
     messageTimeout = setTimeout(() => {
-      successMessage.style.display = "none";
-      errorMessage.style.display = "none";
+      if (successMessage) successMessage.style.display = "none";
+      if (errorMessage) errorMessage.style.display = "none";
     }, 5000);
   }
 
@@ -873,6 +902,8 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
+    setLoading(bookingSubmitBtn, true);
+
     const data = {
       property: "Aero Villas",
       name,
@@ -894,45 +925,50 @@ document.addEventListener("DOMContentLoaded", function () {
       fundingSource: ""
     };
 
-    fetch("https://portal-api.clove.build/api/tpi/website/lead", {
+    const crmPromise = fetch("https://portal-api.clove.build/api/tpi/website/lead", {
       method: "POST",
       headers: {
         "x-api-key": "r3U2RJQOi+V1OMGKqzPJRyH0J9+3cjFY",
         "Content-Type": "application/json"
       },
       body: JSON.stringify(data)
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error("Submission failed");
-        return res.json();
-      })
+    }).then((res) => {
+      if (!res.ok) throw new Error("CRM submission failed");
+      return res.json();
+    });
+
+    const emailPromise = sendLeadEmail({
+      name,
+      phone,
+      email,
+      interested,
+      message,
+      sourcePage: "Let's Connect – 567 Sq.Yds Page"
+    });
+
+    Promise.all([crmPromise, emailPromise])
       .then(() => {
         bookingForm.reset();
         showTempMessage("success");
-        // Email notification to sales@aerovillas.in
-        sendLeadEmail({
-          name,
-          phone,
-          email,
-          interested,
-          message,
-          sourcePage: "Let's Connect – 567 Sq.Yds Page"
-        });
       })
       .catch((err) => {
-        console.error("Error:", err);
+        console.error("Booking form error:", err);
         showTempMessage("error");
+      })
+      .finally(() => {
+        setLoading(bookingSubmitBtn, false);
       });
   });
 
   bookingForm?.addEventListener("input", () => {
     clearTimeout(messageTimeout);
-    successMessage.style.display = "none";
-    errorMessage.style.display = "none";
+    if (successMessage) successMessage.style.display = "none";
+    if (errorMessage) errorMessage.style.display = "none";
   });
 
-  // === Enquiry Form (Updated with Toast & Offcanvas Close) ===
+  // === Enquiry Form (Offcanvas / Side Modal) ===
   const enquiryForm = document.getElementById("enquiryForm");
+  const enquirySubmitBtn = enquiryForm?.querySelector("button[type='submit']");
   const enquiryOffcanvasEl = document.getElementById("enquiryOffcanvas");
   const enquiryToastEl = document.getElementById("enquiryToast");
 
@@ -955,6 +991,8 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
+    setLoading(enquirySubmitBtn, true);
+
     const data = {
       property: "Aero Villas",
       name,
@@ -976,44 +1014,49 @@ document.addEventListener("DOMContentLoaded", function () {
       fundingSource: ""
     };
 
-    fetch("https://portal-api.clove.build/api/tpi/website/lead", {
+    const crmPromise = fetch("https://portal-api.clove.build/api/tpi/website/lead", {
       method: "POST",
       headers: {
         "x-api-key": "r3U2RJQOi+V1OMGKqzPJRyH0J9+3cjFY",
         "Content-Type": "application/json"
       },
       body: JSON.stringify(data)
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error("Submission failed");
-        return res.json();
-      })
+    }).then((res) => {
+      if (!res.ok) throw new Error("CRM submission failed");
+      return res.json();
+    });
+
+    const emailPromise = sendLeadEmail({
+      name,
+      phone,
+      email,
+      interested,
+      message,
+      sourcePage: "Enquiry Sidebar – 567 Sq.Yds Page"
+    });
+
+    Promise.all([crmPromise, emailPromise])
       .then(() => {
         enquiryForm.reset();
 
-        // Email notification to sales@aerovillas.in
-        sendLeadEmail({
-          name,
-          phone,
-          email,
-          interested,
-          message,
-          sourcePage: "Enquiry Sidebar – 567 Sq.Yds Page"
-        });
-
-        // Hide the offcanvas
         const offcanvas = bootstrap.Offcanvas.getInstance(enquiryOffcanvasEl);
         if (offcanvas) {
           setTimeout(() => offcanvas.hide(), 300);
         }
 
-        // Show toast message
-        const toast = new bootstrap.Toast(enquiryToastEl);
-        toast.show();
+        if (enquiryToastEl) {
+          const toast = new bootstrap.Toast(enquiryToastEl);
+          toast.show();
+        } else {
+          alert(userSuccessMsg);
+        }
       })
       .catch((err) => {
-        alert("Sorry, there was an error sending your form. Please try again.");
         console.error("Enquiry form error:", err);
+        alert(userErrorMsg);
+      })
+      .finally(() => {
+        setLoading(enquirySubmitBtn, false);
       });
   });
 });

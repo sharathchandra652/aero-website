@@ -332,27 +332,32 @@
     <script src="js/custom-swiper-2.js"></script>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
+        function setLoading(btn, isLoading, loadingText = "Submitting...") {
+          if (!btn) return;
+          if (isLoading) {
+            btn.dataset.origText = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = loadingText;
+          } else {
+            btn.disabled = false;
+            if (btn.dataset.origText) btn.innerHTML = btn.dataset.origText;
+          }
+        }
+
+        const userErrorMsg = "Unable to submit your request right now. Please try again or contact our team directly.";
+        const userSuccessMsg = "Your form has been submitted successfully. Our team will contact you shortly.";
+
         // === Brochure Download Form ===
         const brochureForm = document.getElementById("brochureForm");
-        const submitBtn = brochureForm?.querySelector("button[type='submit']");
+        const brochureSubmitBtn = brochureForm?.querySelector("button[type='submit']");
         const modalEl = document.getElementById("brochureModal");
-
-        // Prevent button bounce
-        if (submitBtn) {
-          submitBtn.addEventListener("mousedown", function () {
-            this.style.boxShadow = "none";
-            this.style.transform = "none";
-          });
-        }
 
         brochureForm?.addEventListener("submit", function (e) {
           e.preventDefault();
 
           const name = document.getElementById("namebro").value.trim();
           const number = document.getElementById("numberbro").value.trim();
-          const interested = document
-            .getElementById("interestedbro")
-            .value.trim();
+          const interested = document.getElementById("interestedbro").value.trim();
           const message = document.getElementById("description").value.trim();
           const phonePattern = /^[6-9]\d{9}$/;
 
@@ -362,74 +367,45 @@
           }
 
           if (!phonePattern.test(number)) {
-            alert(
-              "Please enter a valid 10-digit Indian phone number starting with 6-9."
-            );
+            alert("Please enter a valid 10-digit Indian phone number starting with 6-9.");
             return;
           }
 
+          setLoading(brochureSubmitBtn, true, "Downloading...");
+
           const data = {
-            property: "Aero Villas",
-            name: name,
-            mobileNo: number,
-            interested: interested,
-            email: "",
-            source: "Aerovillas Website",
-            subSource: "Brochure Download Modal",
-            isOtpVerified: false,
-            sitevisitDate: "",
-            message: message,
-            type: "Villas",
-            configuration: "",
-            location: "",
-            budget: "",
-            facing: "",
-            floor: "",
-            visitedProject: "",
-            fundingSource: "",
+            property: "Aero Villas", name: name, mobileNo: number, interested: interested, email: "",
+            source: "Aerovillas Website", subSource: "Brochure Download Modal", isOtpVerified: false,
+            sitevisitDate: "", message: message, type: "Villas", configuration: "", location: "", budget: "", facing: "", floor: "", visitedProject: "", fundingSource: ""
           };
 
-          // Send data to backend  POST
+          const crmPromise = fetch("https://portal-api.clove.build/api/tpi/website/lead", {
+            method: "POST", headers: { "x-api-key": "r3U2RJQOi+V1OMGKqzPJRyH0J9+3cjFY", "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+          }).then(res => { if (!res.ok) throw new Error("CRM failed"); return res.json(); });
 
-          fetch("https://portal-api.clove.build/api/tpi/website/lead", {
-            method: "POST",
-            headers: {
-              "x-api-key": "r3U2RJQOi+V1OMGKqzPJRyH0J9+3cjFY",
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-          })
-            .then((response) => {
-              if (!response.ok) throw new Error("Submission failed");
-              return response.json();
-            })
+          const emailPromise = sendLeadEmail({ name, phone: number, email: "", interested, message, sourcePage: "Brochure Download Modal – Terms Page" });
+
+          Promise.all([crmPromise, emailPromise])
             .then(() => {
-              // Trigger brochure download
-              const pdfUrl = "images/Aero Villas Brochure 2025 Final.pdf";
               const link = document.createElement("a");
-              link.href = pdfUrl;
+              link.href = "images/Aero Villas Brochure 2025 Final.pdf";
               link.download = "Aero-Villas-Brochure.pdf";
               document.body.appendChild(link);
               link.click();
               document.body.removeChild(link);
 
-              // Reset form and close modal
               brochureForm.reset();
               const modal = bootstrap.Modal.getInstance(modalEl);
-              if (modal) {
-                setTimeout(() => modal.hide(), 500);
-              }
+              if (modal) setTimeout(() => modal.hide(), 500);
             })
-            .catch((error) => {
-              alert(
-                "There was a problem submitting your data. Please try again."
-              );
-              console.error("Brochure form error:", error);
-            });
+            .catch(error => { console.error("Brochure form error:", error); alert(userErrorMsg); })
+            .finally(() => setLoading(brochureSubmitBtn, false));
         });
 
         // === Schedule Visit Form ===
         const bookingForm = document.getElementById("booking_form");
+        const bookingSubmitBtn = bookingForm?.querySelector("button[type='submit']");
         const successMsg = document.getElementById("success_message_col");
         const errorMsg = document.getElementById("error_message");
         let notificationTimeout;
@@ -437,166 +413,97 @@
         function showMessage(type) {
           clearTimeout(notificationTimeout);
           if (type === "success") {
-            successMsg.style.display = "block";
-            errorMsg.style.display = "none";
+            if (successMsg) successMsg.style.display = "block";
+            if (errorMsg) errorMsg.style.display = "none";
           } else {
-            errorMsg.style.display = "block";
-            successMsg.style.display = "none";
+            if (errorMsg) errorMsg.style.display = "block";
+            if (successMsg) successMsg.style.display = "none";
           }
-
           notificationTimeout = setTimeout(() => {
-            successMsg.style.display = "none";
-            errorMsg.style.display = "none";
+            if (successMsg) successMsg.style.display = "none";
+            if (errorMsg) errorMsg.style.display = "none";
           }, 5000);
         }
 
         bookingForm?.addEventListener("submit", function (e) {
           e.preventDefault();
-
           const name = document.getElementById("name").value.trim();
           const phone = document.getElementById("phone").value.trim();
           const email = document.getElementById("email").value.trim();
           const interested = document.getElementById("interested").value.trim();
           const message = document.getElementById("message").value.trim();
 
-          const phonePattern = /^[6-9]\d{9}$/;
+          if (!name || !phone) { alert("Please fill all required fields."); return; }
+          if (!/^[6-9]\d{9}$/.test(phone)) { alert("Please enter a valid 10-digit Indian phone number starting with 6-9."); return; }
 
-          if (!name || !phone) {
-            alert("Please fill all required fields.");
-            return;
-          }
-
-          if (!phonePattern.test(phone)) {
-            alert(
-              "Please enter a valid 10-digit Indian phone number starting with 6-9."
-            );
-            return;
-          }
+          setLoading(bookingSubmitBtn, true);
 
           const data = {
-            property: "Aero Villas",
-            name: name,
-            mobileNo: phone,
-            email: email,
-            interested: interested,
-            source: "Aerovillas Website",
-            subSource: "Schedule Visit Form",
-            isOtpVerified: false,
-            sitevisitDate: "",
-            message: message,
-            type: "Villas",
-            configuration: "",
-            location: "",
-            budget: "",
-            facing: "",
-            floor: "",
-            visitedProject: "",
-            fundingSource: "",
+            property: "Aero Villas", name, mobileNo: phone, email, interested, source: "Aerovillas Website",
+            subSource: "Schedule Visit Form", isOtpVerified: false, sitevisitDate: "", message, type: "Villas",
+            configuration: "", location: "", budget: "", facing: "", floor: "", visitedProject: "", fundingSource: ""
           };
 
-          fetch("https://portal-api.clove.build/api/tpi/website/lead", {
-            method: "POST",
-            headers: {
-              "x-api-key": "r3U2RJQOi+V1OMGKqzPJRyH0J9+3cjFY",
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-          })
-            .then((response) => {
-              if (!response.ok) throw new Error("Submission failed");
-              return response.json();
-            })
-            .then(() => {
-              bookingForm.reset();
-              showMessage("success");
-            })
-            .catch((error) => {
-              console.error("Error:", error);
-              showMessage("error");
-            });
+          const crmPromise = fetch("https://portal-api.clove.build/api/tpi/website/lead", {
+            method: "POST", headers: { "x-api-key": "r3U2RJQOi+V1OMGKqzPJRyH0J9+3cjFY", "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+          }).then(res => { if (!res.ok) throw new Error("CRM failed"); return res.json(); });
+
+          const emailPromise = sendLeadEmail({ name, phone, email, interested, message, sourcePage: "Let's Connect – Terms Page" });
+
+          Promise.all([crmPromise, emailPromise])
+            .then(() => { bookingForm.reset(); showMessage("success"); })
+            .catch(error => { console.error("Booking error:", error); showMessage("error"); })
+            .finally(() => setLoading(bookingSubmitBtn, false));
         });
 
         bookingForm?.addEventListener("input", () => {
           clearTimeout(notificationTimeout);
-          successMsg.style.display = "none";
-          errorMsg.style.display = "none";
+          if (successMsg) successMsg.style.display = "none";
+          if (errorMsg) errorMsg.style.display = "none";
         });
-      });
 
-      // === Enquiry Modal Form ===
-      const enquiryForm = document.getElementById("enquiryForm");
-      const enquiryModalEl = document.getElementById("enquiryModal");
+        // === Enquiry Modal Form ===
+        const enquiryForm = document.getElementById("enquiryForm");
+        const enquirySubmitBtn = enquiryForm?.querySelector("button[type='submit']");
+        const enquiryModalEl = document.getElementById("enquiryModal");
 
-      enquiryForm?.addEventListener("submit", function (e) {
-        e.preventDefault();
+        enquiryForm?.addEventListener("submit", function (e) {
+          e.preventDefault();
+          const name = document.getElementById("enqName").value.trim();
+          const phone = document.getElementById("enqPhone").value.trim();
+          const email = document.getElementById("enqEmail").value.trim();
+          const interested = document.getElementById("enqInterested").value.trim();
+          const message = document.getElementById("enqMessage").value.trim();
 
-        const name = document.getElementById("enqName").value.trim();
-        const phone = document.getElementById("enqPhone").value.trim();
-        const email = document.getElementById("enqEmail").value.trim();
-        const interested = document
-          .getElementById("enqInterested")
-          .value.trim();
-        const message = document.getElementById("enqMessage").value.trim();
+          if (!name || !phone || !interested) { alert("Please fill all required fields."); return; }
+          if (!/^[6-9]\d{9}$/.test(phone)) { alert("Please enter a valid 10-digit Indian phone number starting with 6-9."); return; }
 
-        const phonePattern = /^[6-9]\d{9}$/;
+          setLoading(enquirySubmitBtn, true);
 
-        if (!name || !phone || !interested) {
-          alert("Please fill all required fields.");
-          return;
-        }
+          const data = {
+            property: "Aero Villas", name, mobileNo: phone, email, interested, message, source: "Aerovillas Website",
+            subSource: "Side Enquiry Modal", isOtpVerified: false, sitevisitDate: "", type: "Villas",
+            configuration: "", location: "", budget: "", facing: "", floor: "", visitedProject: "", fundingSource: ""
+          };
 
-        if (!phonePattern.test(phone)) {
-          alert(
-            "Please enter a valid 10-digit Indian phone number starting with 6-9."
-          );
-          return;
-        }
+          const crmPromise = fetch("https://portal-api.clove.build/api/tpi/website/lead", {
+            method: "POST", headers: { "x-api-key": "r3U2RJQOi+V1OMGKqzPJRyH0J9+3cjFY", "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+          }).then(res => { if (!res.ok) throw new Error("CRM failed"); return res.json(); });
 
-        const data = {
-          property: "Aero Villas",
-          name: name,
-          mobileNo: phone,
-          email: email,
-          interested: interested,
-          message: message,
-          source: "Aerovillas Website",
-          subSource: "Side Enquiry Modal",
-          isOtpVerified: false,
-          sitevisitDate: "",
-          type: "Villas",
-          configuration: "",
-          location: "",
-          budget: "",
-          facing: "",
-          floor: "",
-          visitedProject: "",
-          fundingSource: "",
-        };
+          const emailPromise = sendLeadEmail({ name, phone, email, interested, message, sourcePage: "Enquiry Sidebar – Terms Page" });
 
-        fetch("https://portal-api.clove.build/api/tpi/website/lead", {
-          method: "POST",
-          headers: {
-            "x-api-key": "r3U2RJQOi+V1OMGKqzPJRyH0J9+3cjFY",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        })
-          .then((response) => {
-            if (!response.ok) throw new Error("Submission failed");
-            return response.json();
-          })
-          .then(() => {
-            enquiryForm.reset();
-            const modal = bootstrap.Modal.getInstance(enquiryModalEl);
-            if (modal) setTimeout(() => modal.hide(), 500);
-            alert("Your form has been submitted successfully. Our team will contact you shortly.");
-          })
-          .catch((error) => {
-            alert(
-              "There was an error submitting your enquiry. Please try again."
-            );
-            console.error("Enquiry form error:", error);
-          });
+          Promise.all([crmPromise, emailPromise])
+            .then(() => {
+              enquiryForm.reset();
+              const modal = bootstrap.Modal.getInstance(enquiryModalEl);
+              if (modal) setTimeout(() => modal.hide(), 500);
+              alert(userSuccessMsg);
+            })
+            .catch(error => { console.error("Enquiry form error:", error); alert(userErrorMsg); })
+            .finally(() => setLoading(enquirySubmitBtn, false));
+        });
       });
     </script>
 </body>
