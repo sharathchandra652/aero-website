@@ -492,7 +492,7 @@ Schedule a Visit
 </div>
 </form>
 <div id=success_message_col class="mt-3" style=display:none>
-Your message has been sent successfully.
+Your form has been submitted successfully. Our team will contact you shortly.
 </div>
 <div id=error_message class="error mt-3" style=display:none>
 Sorry, there was an error sending your form. Please try again.
@@ -705,7 +705,7 @@ Telangana 501218
 <div class=row>
 <div class=col-md-2><a href=./privacy-policy.html>Privacy Policy</a></div>
 <div class=col-md-2><a href=./terms-and-conditions.html>Terms & Conditions</a></div>
-<div class=col-md-4>CopyRight 2026 - SM INFRA</div>
+<div class="col-md-4">&copy; 2026 - SM INFRA</div>
 <div class="col-md-4 text-md-end">
 <div class="col-md-6 text-md-end">
 <div class="social-icons mb-sm-30 text-center">
@@ -724,9 +724,11 @@ Telangana 501218
 </footer>
 <script data-cfasync=false src=../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js></script>
 <script src=js/vendors.js></script>
+<!-- Aero Villas SMTP mailer helper -->
+<script src="js/emailjs-form.js"></script>
 <script src=js/designesia.js></script>
 <script>$("#room-carousel").owlCarousel({loop:!0,autoplay:!0,autoplayTimeout:2e3,autoplayHoverPause:!0})</script>
-<script>document.getElementById("access-form").addEventListener("submit",(function(e){e.preventDefault();const t=document.getElementById("name").value.trim(),o=document.getElementById("number").value.trim();if(!t||!o)return void alert("Please fill in both Name and Phone Number.");if(!/^[6-9]\d{9}$/.test(o))return void alert("Please enter a valid 10-digit Indian phone number starting with 6-9.");const r={property:"Aero Villas",name:t,mobileNo:o,email:"",interested:"567 Floorplans",source:"Aerovillas Website",subSource:"Floorplan Access Form",isOtpVerified:!1,sitevisitDate:"",message:"User submitted form to view 567 floorplans",type:"Villas",configuration:"",location:"",budget:"",facing:"",floor:"",visitedProject:"",fundingSource:""};fetch("https://portal-api.clove.build/api/tpi/website/lead",{method:"POST",headers:{"x-api-key":"r3U2RJQOi+V1OMGKqzPJRyH0J9+3cjFY","Content-Type":"application/json"},body:JSON.stringify(r)}).then((e=>{if(!e.ok)throw new Error("Submission failed");return e.json()})).then((()=>{document.getElementById("access-form").style.display="none";const e=document.getElementById("floorplan-carousel");e.classList.remove("blurred"),e.classList.add("unblurred")})).catch((e=>{alert("There was a problem submitting your data. Please try again."),console.error("Floorplan form error:",e)}))}))</script>
+<script>document.getElementById("access-form").addEventListener("submit",(function(e){e.preventDefault();const t=document.getElementById("name").value.trim(),o=document.getElementById("number").value.trim();if(!t||!o)return void alert("Please fill in both Name and Phone Number.");if(!/^[6-9]\d{9}$/.test(o))return void alert("Please enter a valid 10-digit Indian phone number starting with 6-9.");const r={property:"Aero Villas",name:t,mobileNo:o,email:"",interested:"567 Floorplans",source:"Aerovillas Website",subSource:"Floorplan Access Form",isOtpVerified:!1,sitevisitDate:"",message:"User submitted form to view 567 floorplans",type:"Villas",configuration:"",location:"",budget:"",facing:"",floor:"",visitedProject:"",fundingSource:""};fetch("https://portal-api.clove.build/api/tpi/website/lead",{method:"POST",headers:{"x-api-key":"r3U2RJQOi+V1OMGKqzPJRyH0J9+3cjFY","Content-Type":"application/json"},body:JSON.stringify(r)}).then((e=>{if(!e.ok)throw new Error("Submission failed");return e.json()})).then((()=>{document.getElementById("access-form").style.display="none";const e=document.getElementById("floorplan-carousel");e.classList.remove("blurred"),e.classList.add("unblurred")})).catch((e=>{alert("Sorry, there was an error sending your form. Please try again."),console.error("Floorplan form error:",e)}))}))</script>
 <script>
   function showFloorplan(direction) {
     const container = document.getElementById("floorplan-image");
@@ -826,7 +828,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (modalInstance) setTimeout(() => modalInstance.hide(), 500);
       })
       .catch((err) => {
-        alert("There was a problem submitting your data. Please try again.");
+        alert("Sorry, there was an error sending your form. Please try again.");
         console.error("Brochure form error:", err);
       });
   });
@@ -907,6 +909,15 @@ document.addEventListener("DOMContentLoaded", function () {
       .then(() => {
         bookingForm.reset();
         showTempMessage("success");
+        // Email notification to sales@aerovillas.in
+        sendLeadEmail({
+          name,
+          phone,
+          email,
+          interested,
+          message,
+          sourcePage: "Let's Connect – 567 Sq.Yds Page"
+        });
       })
       .catch((err) => {
         console.error("Error:", err);
@@ -980,6 +991,16 @@ document.addEventListener("DOMContentLoaded", function () {
       .then(() => {
         enquiryForm.reset();
 
+        // Email notification to sales@aerovillas.in
+        sendLeadEmail({
+          name,
+          phone,
+          email,
+          interested,
+          message,
+          sourcePage: "Enquiry Sidebar – 567 Sq.Yds Page"
+        });
+
         // Hide the offcanvas
         const offcanvas = bootstrap.Offcanvas.getInstance(enquiryOffcanvasEl);
         if (offcanvas) {
@@ -991,7 +1012,7 @@ document.addEventListener("DOMContentLoaded", function () {
         toast.show();
       })
       .catch((err) => {
-        alert("There was an error submitting your enquiry. Please try again.");
+        alert("Sorry, there was an error sending your form. Please try again.");
         console.error("Enquiry form error:", err);
       });
   });
@@ -1009,3 +1030,6 @@ document.addEventListener("DOMContentLoaded", function () {
 </div>
 </body>
 </html>
+
+
+
