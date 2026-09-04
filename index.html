@@ -795,27 +795,53 @@ Schedule a Visit
                   <input name=name id=name class=form-control placeholder="Your Name*" required>
                 </div>
                 <div class=col-md-6>
-                  <input type=tel name=phone id=phone class=form-control placeholder="Phone Number*" minlength=10
-                    required>
+                  <input type=tel name=phone id=phone class=form-control placeholder="Phone Number*" minlength=10 required>
                 </div>
                 <div class=col-md-6>
-                  <input class=form-control name=email id=email type=email placeholder=Email>
+                  <input class=form-control name=email id=email type=email placeholder="Email*" required>
                 </div>
                 <div class=col-md-6>
                   <select name=interested id=interested class=form-control required>
-                    <option value="">Interested In</option>
+                    <option value="">Interested Villa / Type*</option>
                     <option value="267 sq.yards">267 sq.yards</option>
                     <option value="440 sq.yards">440 sq.yards</option>
                     <option value="567 sq.yards">567 sq.yards</option>
                     <option value="600 sq.yards">600 sq.yards</option>
                   </select>
                 </div>
+                <div class=col-md-6>
+                  <select name=budget id=budget class=form-control required>
+                    <option value="">Select Budget*</option>
+                    <option value="₹2 Cr - ₹3 Cr">₹2 Cr - ₹3 Cr</option>
+                    <option value="₹3 Cr - ₹5 Cr">₹3 Cr - ₹5 Cr</option>
+                    <option value="₹5 Cr+">₹5 Cr+</option>
+                  </select>
+                </div>
+                <div class=col-md-6>
+                  <input type=date name=preferredDate id=preferredDate class=form-control placeholder="Preferred Visit Date">
+                </div>
+                <div class=col-md-6>
+                  <input type=time name=preferredTime id=preferredTime class=form-control placeholder="Preferred Visit Time">
+                </div>
+                <div class=col-md-6>
+                  <input type=number min=1 max=20 name=visitors id=visitors class=form-control placeholder="Number of Visitors">
+                </div>
                 <div class=col-md-12>
-                  <textarea name=message id=message class="form-control h-150px" placeholder=Message></textarea>
+                  <select name=source id=source class=form-control>
+                    <option value="">How did you hear about us?</option>
+                    <option value="Google Search">Google Search</option>
+                    <option value="Social Media">Social Media</option>
+                    <option value="Referral">Referral</option>
+                    <option value="Hoarding/Banner">Hoarding/Banner</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+                <div class=col-md-12>
+                  <textarea name=message id=message class="form-control h-150px" placeholder="Message / Requirements"></textarea>
                 </div>
                 <div class=col-md-12>
                   <div class=text-start>
-                    <input type=submit id=send_message value="Send Message" class=btn-main>
+                    <button type=submit id=send_message class=btn-main>Schedule Visit</button>
                   </div>
                 </div>
               </div>
@@ -961,21 +987,21 @@ Enquiry Now
 
     <form id="enquiryForm" class="offcanvas-body" style="overflow-y: auto; padding: 20px;">
       <div class="mb-3">
-        <label for="enqName" class="form-label text-light">Name*</label>
+        <label for="enqName" class="form-label text-light">Full Name*</label>
         <input class="form-control text-dark border-secondary" id="enqName" required>
       </div>
       <div class="mb-3">
-        <label for="enqPhone" class="form-label text-light">Phone Number*</label>
+        <label for="enqPhone" class="form-label text-light">Mobile Number*</label>
         <input type="tel" class="form-control text-dark border-secondary" id="enqPhone" required>
       </div>
       <div class="mb-3">
-        <label for="enqEmail" class="form-label text-light">Email</label>
-        <input type="email" class="form-control  text-dark border-secondary" id="enqEmail">
+        <label for="enqEmail" class="form-label text-light">Email*</label>
+        <input type="email" class="form-control text-dark border-secondary" id="enqEmail" required>
       </div>
       <div class="mb-3">
-        <label for="enqInterested" class="form-label text-light">Interested In*</label>
-        <select id="enqInterested" class="form-control text-light border-secondary" required>
-          <option value="" class="text-light">Select</option>
+        <label for="enqInterested" class="form-label text-light">Interested Villa / Villa Type*</label>
+        <select id="enqInterested" class="form-control text-dark border-secondary" required>
+          <option value="" class="text-dark">Select Villa Type</option>
           <option value="267 sq.yards" class="text-dark">267 sq.yards</option>
           <option value="440 sq.yards" class="text-dark">440 sq.yards</option>
           <option value="567 sq.yards" class="text-dark">567 sq.yards</option>
@@ -983,11 +1009,43 @@ Enquiry Now
         </select>
       </div>
       <div class="mb-3">
-        <label for="enqMessage" class="form-label text-light">Message (Optional)</label>
-        <textarea class="form-control  text-dark border-secondary" id="enqMessage" rows="3"></textarea>
+        <label for="enqBudget" class="form-label text-light">Budget*</label>
+        <select id="enqBudget" class="form-control text-dark border-secondary" required>
+          <option value="" class="text-dark">Select Budget</option>
+          <option value="₹2 Cr - ₹3 Cr" class="text-dark">₹2 Cr - ₹3 Cr</option>
+          <option value="₹3 Cr - ₹5 Cr" class="text-dark">₹3 Cr - ₹5 Cr</option>
+          <option value="₹5 Cr+" class="text-dark">₹5 Cr+</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="enqDate" class="form-label text-light">Preferred Visit Date</label>
+        <input type="date" class="form-control text-dark border-secondary" id="enqDate">
+      </div>
+      <div class="mb-3">
+        <label for="enqTime" class="form-label text-light">Preferred Visit Time</label>
+        <input type="time" class="form-control text-dark border-secondary" id="enqTime">
+      </div>
+      <div class="mb-3">
+        <label for="enqVisitors" class="form-label text-light">Number of Visitors</label>
+        <input type="number" min="1" max="20" class="form-control text-dark border-secondary" id="enqVisitors">
+      </div>
+      <div class="mb-3">
+        <label for="enqSource" class="form-label text-light">How did you hear about us?</label>
+        <select id="enqSource" class="form-control text-dark border-secondary">
+          <option value="" class="text-dark">Select Source</option>
+          <option value="Google Search" class="text-dark">Google Search</option>
+          <option value="Social Media" class="text-dark">Social Media</option>
+          <option value="Referral" class="text-dark">Referral</option>
+          <option value="Hoarding/Banner" class="text-dark">Hoarding/Banner</option>
+          <option value="Other" class="text-dark">Other</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="enqMessage" class="form-label text-light">Message / Requirements</label>
+        <textarea class="form-control text-dark border-secondary" id="enqMessage" rows="3"></textarea>
       </div>
       <div class="text-center">
-        <button type="submit" class="btn-main">Submit</button>
+        <button type="submit" class="btn-main">Submit Enquiry</button>
       </div>
     </form>
   </div>
@@ -1141,26 +1199,32 @@ Enquiry Now
           });
       });
 
-      // === Booking Form ===
+      // === Booking Form (Schedule Visit) ===
       const bookingForm = document.getElementById("booking_form");
       const bookingSubmitBtn = bookingForm?.querySelector("button[type='submit']");
       const successMessage = document.getElementById("success_message_col");
       const errorMessage = document.getElementById("error_message");
       let messageTimeout;
 
-      function showTempMessage(type) {
+      function showTempMessage(type, text) {
         clearTimeout(messageTimeout);
         if (type === "success") {
-          if (successMessage) successMessage.style.display = "block";
+          if (successMessage) {
+            successMessage.textContent = text || "Your site visit request has been received. Our sales team will contact you to confirm the visit.";
+            successMessage.style.display = "block";
+          }
           if (errorMessage) errorMessage.style.display = "none";
         } else {
-          if (errorMessage) errorMessage.style.display = "block";
+          if (errorMessage) {
+            errorMessage.textContent = text || "Sorry, there was an error sending your form. Please try again.";
+            errorMessage.style.display = "block";
+          }
           if (successMessage) successMessage.style.display = "none";
         }
         messageTimeout = setTimeout(() => {
           if (successMessage) successMessage.style.display = "none";
           if (errorMessage) errorMessage.style.display = "none";
-        }, 5000);
+        }, 6000);
       }
 
       bookingForm?.addEventListener("submit", function (e) {
@@ -1168,38 +1232,48 @@ Enquiry Now
 
         const name = document.getElementById("name").value.trim();
         const phone = document.getElementById("phone").value.trim();
-        const email = document.getElementById("email").value.trim();
-        const interested = document.getElementById("interested").value.trim();
-        const message = document.getElementById("message").value.trim();
+        const email = document.getElementById("email")?.value.trim() || "";
+        const interestedIn = document.getElementById("interested")?.value.trim() || "";
+        const budget = document.getElementById("budget")?.value.trim() || "";
+        const preferredDate = document.getElementById("preferredDate")?.value.trim() || "";
+        const preferredTime = document.getElementById("preferredTime")?.value.trim() || "";
+        const visitors = document.getElementById("visitors")?.value.trim() || "";
+        const source = document.getElementById("source")?.value.trim() || "website";
+        const message = document.getElementById("message")?.value.trim() || "";
 
-        if (!name || !phone) {
+        if (!name || !phone || !interestedIn || !budget) {
           alert("Please fill all required fields.");
           return;
         }
 
-        if (!/^[6-9]\d{9}$/.test(phone)) {
+        if (!/^[6-9]\d{9}$/.test(phone.replace(/\D/g, ""))) {
           alert("Please enter a valid 10-digit Indian phone number starting with 6-9.");
           return;
         }
 
-        setLoading(bookingSubmitBtn, true);
+        setLoading(bookingSubmitBtn, true, "Scheduling...");
 
         submitLead({
+          leadType: "schedule_visit",
           name,
           phone,
           email,
-          interested,
+          interestedIn,
+          budget,
+          preferredDate,
+          preferredTime,
+          visitors,
+          source,
           message,
-          sourcePage: "Let's Connect – Main Page",
-          subSource: "Schedule Visit Form"
+          page: window.location.pathname
         })
-          .then(() => {
+          .then((res) => {
             bookingForm.reset();
-            showTempMessage("success");
+            showTempMessage("success", res.message || "Your site visit request has been received. Our sales team will contact you to confirm the visit.");
           })
           .catch((err) => {
             console.error("Booking form error:", err);
-            showTempMessage("error");
+            showTempMessage("error", err.message || "Sorry, there was an error sending your form. Please try again.");
           })
           .finally(() => {
             setLoading(bookingSubmitBtn, false);
@@ -1223,32 +1297,42 @@ Enquiry Now
 
         const name = document.getElementById("enqName").value.trim();
         const phone = document.getElementById("enqPhone").value.trim();
-        const email = document.getElementById("enqEmail").value.trim();
-        const interested = document.getElementById("enqInterested").value.trim();
-        const message = document.getElementById("enqMessage").value.trim();
+        const email = document.getElementById("enqEmail")?.value.trim() || "";
+        const interestedIn = document.getElementById("enqInterested")?.value.trim() || "";
+        const budget = document.getElementById("enqBudget")?.value.trim() || "";
+        const preferredDate = document.getElementById("enqDate")?.value.trim() || "";
+        const preferredTime = document.getElementById("enqTime")?.value.trim() || "";
+        const visitors = document.getElementById("enqVisitors")?.value.trim() || "";
+        const source = document.getElementById("enqSource")?.value.trim() || "website";
+        const message = document.getElementById("enqMessage")?.value.trim() || "";
 
-        if (!name || !phone || !interested) {
+        if (!name || !phone || !email || !interestedIn || !budget) {
           alert("Please fill all required fields.");
           return;
         }
 
-        if (!/^[6-9]\d{9}$/.test(phone)) {
+        if (!/^[6-9]\d{9}$/.test(phone.replace(/\D/g, ""))) {
           alert("Please enter a valid 10-digit Indian phone number starting with 6-9.");
           return;
         }
 
-        setLoading(enquirySubmitBtn, true);
+        setLoading(enquirySubmitBtn, true, "Submitting...");
 
         submitLead({
+          leadType: "enquiry",
           name,
           phone,
           email,
-          interested,
+          interestedIn,
+          budget,
+          preferredDate,
+          preferredTime,
+          visitors,
+          source,
           message,
-          sourcePage: "Enquiry Sidebar – Main Page",
-          subSource: "Side Enquiry Modal"
+          page: window.location.pathname
         })
-          .then(() => {
+          .then((res) => {
             enquiryForm.reset();
 
             const offcanvas = bootstrap.Offcanvas.getInstance(enquiryOffcanvasEl);
@@ -1256,16 +1340,19 @@ Enquiry Now
               setTimeout(() => offcanvas.hide(), 300);
             }
 
+            const msg = res.message || "Thank you. Your enquiry has been received. Our sales team will contact you shortly.";
             if (enquiryToastEl) {
+              const toastBody = enquiryToastEl.querySelector('.toast-body');
+              if (toastBody) toastBody.textContent = msg;
               const toast = new bootstrap.Toast(enquiryToastEl);
               toast.show();
             } else {
-              alert(userSuccessMsg);
+              alert(msg);
             }
           })
           .catch((err) => {
             console.error("Enquiry form error:", err);
-            alert(userErrorMsg);
+            alert(err.message || "We encountered an issue submitting your request. Please try again.");
           })
           .finally(() => {
             setLoading(enquirySubmitBtn, false);
