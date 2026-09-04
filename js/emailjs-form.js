@@ -1,51 +1,66 @@
 /**
- * Aero Villas – Form Email Sender
+ * Aero Villas – Website Enquiry Submission Client
  * ────────────────────────────────────────────────────────────────
- * Sends lead/enquiry data to the SMTP mailer serverless API.
- * In production on Vercel, it calls /api/send-email.
- * During local dev (localhost), it calls http://localhost:3001/send-email.
+ * Submits enquiry form payloads to the Vercel Serverless Function (/api/enquiry).
  * ────────────────────────────────────────────────────────────────
  */
-
-const MAILER_URL = (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
-  ? "http://localhost:3001/send-email"
-  : "/api/send-email";
 
 /**
- * Send a lead notification email via the SMTP mailer API.
- * Dispatches the email notification asynchronously without blocking the user form submission UI.
+ * Submit enquiry data to /api/enquiry.
  *
  * @param {Object} params
- *   @param {string} params.name       - Visitor's full name
- *   @param {string} params.phone      - Visitor's phone number
- *   @param {string} params.email      - Visitor's email (optional)
- *   @param {string} params.interested - Property / product of interest
- *   @param {string} params.message    - Message text (optional)
- *   @param {string} params.sourcePage - Which page/form submitted
+ *   @param {string} params.name          - Visitor's full name (Required)
+ *   @param {string} params.phone         - Visitor's phone number (Required)
+ *   @param {string} params.email         - Visitor's email (Required)
+ *   @param {string} params.interest      - Property of interest
+ *   @param {string} params.preferredDate - Preferred visit date (Optional)
+ *   @param {string} params.message       - Message text (Optional)
+ *   @param {string} params.source        - Form / Source identifier
+ *   @param {string} params.page          - Page title / URL
+ * @returns {Promise<Object>} Promise resolving to API response { success: true, message: string }
  */
-function sendLeadEmail(params) {
-  return fetch(MAILER_URL, {
+function submitEnquiry(params) {
+  const payload = {
+    name:          params.name          || "",
+    phone:         params.phone         || params.mobileNo || "",
+    email:         params.email         || "",
+    interest:      params.interest      || params.interested || "",
+    preferredDate: params.preferredDate || params.sitevisitDate || "",
+    message:       params.message       || "",
+    source:        params.source        || params.subSource || "Website Form",
+    page:          params.page          || params.sourcePage || window.location.pathname
+  };
+
+  return fetch("/api/enquiry", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      name:       params.name       || "",
-      phone:      params.phone      || "",
-      email:      params.email      || "",
-      interested: params.interested || "",
-      message:    params.message    || "",
-      sourcePage: params.sourcePage || "Aero Villas Website",
-    }),
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    },
+    body: JSON.stringify(payload)
   })
-    .then((res) => {
-      if (!res.ok) {
-        console.warn("⚠️ Email notification API status:", res.status);
-      } else {
-        console.log("✅ Email notification sent to sales@aerovillas.in");
+    .then(async (res) => {
+      let data;
+      try {
+        data = await res.json();
+      } catch (e) {
+        data = { success: false, message: "Unable to send enquiry" };
       }
-      return res.json().catch(() => ({}));
-    })
-    .catch((err) => {
-      console.warn("⚠️ Email notification dispatch warning:", err.message);
-      return {};
+
+      if (!res.ok || !data || data.success !== true) {
+        const errorMsg = (data && data.message) ? data.message : "Unable to send enquiry";
+        return Promise.reject(new Error(errorMsg));
+      }
+
+      return data;
     });
+}
+
+// Helper aliases for existing form handlers across HTML pages
+function submitLead(params) {
+  return submitEnquiry(params);
+}
+
+function sendLeadEmail(params) {
+  return submitEnquiry(params);
 }

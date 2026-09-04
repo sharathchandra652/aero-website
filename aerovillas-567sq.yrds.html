@@ -728,7 +728,7 @@ Telangana 501218
 <script src="js/emailjs-form.js"></script>
 <script src=js/designesia.js></script>
 <script>$("#room-carousel").owlCarousel({loop:!0,autoplay:!0,autoplayTimeout:2e3,autoplayHoverPause:!0})</script>
-<script>document.getElementById("access-form").addEventListener("submit",(function(e){e.preventDefault();const t=document.getElementById("name").value.trim(),o=document.getElementById("number").value.trim();if(!t||!o)return void alert("Please fill in both Name and Phone Number.");if(!/^[6-9]\d{9}$/.test(o))return void alert("Please enter a valid 10-digit Indian phone number starting with 6-9.");const r={property:"Aero Villas",name:t,mobileNo:o,email:"",interested:"567 Floorplans",source:"Aerovillas Website",subSource:"Floorplan Access Form",isOtpVerified:!1,sitevisitDate:"",message:"User submitted form to view 567 floorplans",type:"Villas",configuration:"",location:"",budget:"",facing:"",floor:"",visitedProject:"",fundingSource:""};fetch("https://portal-api.clove.build/api/tpi/website/lead",{method:"POST",headers:{"x-api-key":"r3U2RJQOi+V1OMGKqzPJRyH0J9+3cjFY","Content-Type":"application/json"},body:JSON.stringify(r)}).then((e=>{if(!e.ok)throw new Error("Submission failed");return e.json()})).then((()=>{document.getElementById("access-form").style.display="none";const e=document.getElementById("floorplan-carousel");e.classList.remove("blurred"),e.classList.add("unblurred")})).catch((e=>{alert("Sorry, there was an error sending your form. Please try again."),console.error("Floorplan form error:",e)}))}))</script>
+<script>document.getElementById("access-form").addEventListener("submit",(function(e){e.preventDefault();const t=document.getElementById("name").value.trim(),o=document.getElementById("number").value.trim();if(!t||!o)return void alert("Please fill in both Name and Phone Number.");if(!/^[6-9]\d{9}$/.test(o))return void alert("Please enter a valid 10-digit Indian phone number starting with 6-9.");submitLead({name:t,phone:o,interested:"567 Floorplans",sourcePage:"Floorplan Access Form – 567 Sq.Yds",subSource:"Floorplan Access Form"}).then((()=>{document.getElementById("access-form").style.display="none";const e=document.getElementById("floorplan-carousel");e.classList.remove("blurred"),e.classList.add("unblurred")})).catch((e=>{alert("Sorry, there was an error sending your form. Please try again."),console.error("Floorplan form error:",e)}))}))</script>
 <script>
   function showFloorplan(direction) {
     const container = document.getElementById("floorplan-image");
@@ -797,49 +797,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
     setLoading(brochureSubmitBtn, true, "Downloading...");
 
-    const data = {
-      property: "Aero Villas",
-      name,
-      mobileNo: phone,
-      interested: interest,
-      email: "",
-      source: "Aerovillas Website",
-      subSource: "Brochure Download Modal",
-      isOtpVerified: false,
-      sitevisitDate: "",
-      message,
-      type: "Villas",
-      configuration: "",
-      location: "",
-      budget: "",
-      facing: "",
-      floor: "",
-      visitedProject: "",
-      fundingSource: ""
-    };
-
-    const crmPromise = fetch("https://portal-api.clove.build/api/tpi/website/lead", {
-      method: "POST",
-      headers: {
-        "x-api-key": "r3U2RJQOi+V1OMGKqzPJRyH0J9+3cjFY",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(data)
-    }).then((res) => {
-      if (!res.ok) throw new Error("CRM submission failed");
-      return res.json();
-    });
-
-    const emailPromise = sendLeadEmail({
+    submitLead({
       name,
       phone,
       email: "",
       interested: interest,
       message,
-      sourcePage: "Brochure Download Modal – 567 Sq.Yds Page"
-    });
-
-    Promise.all([crmPromise, emailPromise])
+      sourcePage: "Brochure Download Modal – 567 Sq.Yds Page",
+      subSource: "Brochure Download Modal"
+    })
       .then(() => {
         const link = document.createElement("a");
         link.href = "images/Aero Villas Brochure 2025 Final.pdf";
@@ -904,49 +870,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
     setLoading(bookingSubmitBtn, true);
 
-    const data = {
-      property: "Aero Villas",
-      name,
-      mobileNo: phone,
-      email,
-      interested,
-      source: "Aerovillas Website",
-      subSource: "Schedule Visit Form",
-      isOtpVerified: false,
-      sitevisitDate: "",
-      message,
-      type: "Villas",
-      configuration: "",
-      location: "",
-      budget: "",
-      facing: "",
-      floor: "",
-      visitedProject: "",
-      fundingSource: ""
-    };
-
-    const crmPromise = fetch("https://portal-api.clove.build/api/tpi/website/lead", {
-      method: "POST",
-      headers: {
-        "x-api-key": "r3U2RJQOi+V1OMGKqzPJRyH0J9+3cjFY",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(data)
-    }).then((res) => {
-      if (!res.ok) throw new Error("CRM submission failed");
-      return res.json();
-    });
-
-    const emailPromise = sendLeadEmail({
+    submitLead({
       name,
       phone,
       email,
       interested,
       message,
-      sourcePage: "Let's Connect – 567 Sq.Yds Page"
-    });
-
-    Promise.all([crmPromise, emailPromise])
+      sourcePage: "Let's Connect – 567 Sq.Yds Page",
+      subSource: "Schedule Visit Form"
+    })
       .then(() => {
         bookingForm.reset();
         showTempMessage("success");
@@ -993,49 +925,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
     setLoading(enquirySubmitBtn, true);
 
-    const data = {
-      property: "Aero Villas",
-      name,
-      mobileNo: phone,
-      email,
-      interested,
-      message,
-      source: "Aerovillas Website",
-      subSource: "Side Enquiry Modal",
-      isOtpVerified: false,
-      sitevisitDate: "",
-      type: "Villas",
-      configuration: "",
-      location: "",
-      budget: "",
-      facing: "",
-      floor: "",
-      visitedProject: "",
-      fundingSource: ""
-    };
-
-    const crmPromise = fetch("https://portal-api.clove.build/api/tpi/website/lead", {
-      method: "POST",
-      headers: {
-        "x-api-key": "r3U2RJQOi+V1OMGKqzPJRyH0J9+3cjFY",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(data)
-    }).then((res) => {
-      if (!res.ok) throw new Error("CRM submission failed");
-      return res.json();
-    });
-
-    const emailPromise = sendLeadEmail({
+    submitLead({
       name,
       phone,
       email,
       interested,
       message,
-      sourcePage: "Enquiry Sidebar – 567 Sq.Yds Page"
-    });
-
-    Promise.all([crmPromise, emailPromise])
+      sourcePage: "Enquiry Sidebar – 567 Sq.Yds Page",
+      subSource: "Side Enquiry Modal"
+    })
       .then(() => {
         enquiryForm.reset();
 

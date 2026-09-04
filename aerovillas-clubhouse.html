@@ -576,49 +576,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
     setLoading(brochureSubmitBtn, true, "Downloading...");
 
-    const data = {
-      property: "Aero Villas",
-      name,
-      mobileNo: phone,
-      interested: interest,
-      email: "",
-      source: "Aerovillas Website",
-      subSource: "Brochure Download Modal",
-      isOtpVerified: false,
-      sitevisitDate: "",
-      message,
-      type: "Villas",
-      configuration: "",
-      location: "",
-      budget: "",
-      facing: "",
-      floor: "",
-      visitedProject: "",
-      fundingSource: ""
-    };
-
-    const crmPromise = fetch("https://portal-api.clove.build/api/tpi/website/lead", {
-      method: "POST",
-      headers: {
-        "x-api-key": "r3U2RJQOi+V1OMGKqzPJRyH0J9+3cjFY",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(data)
-    }).then((res) => {
-      if (!res.ok) throw new Error("CRM submission failed");
-      return res.json();
-    });
-
-    const emailPromise = sendLeadEmail({
+    submitLead({
       name,
       phone,
       email: "",
       interested: interest,
       message,
-      sourcePage: "Brochure Download Modal – Clubhouse Page"
-    });
-
-    Promise.all([crmPromise, emailPromise])
+      sourcePage: "Brochure Download Modal – Clubhouse Page",
+      subSource: "Brochure Download Modal"
+    })
       .then(() => {
         const link = document.createElement("a");
         link.href = "images/Aero Villas Brochure 2025 Final.pdf";
@@ -683,49 +649,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
     setLoading(bookingSubmitBtn, true);
 
-    const data = {
-      property: "Aero Villas",
-      name,
-      mobileNo: phone,
-      email,
-      interested,
-      source: "Aerovillas Website",
-      subSource: "Schedule Visit Form",
-      isOtpVerified: false,
-      sitevisitDate: "",
-      message,
-      type: "Villas",
-      configuration: "",
-      location: "",
-      budget: "",
-      facing: "",
-      floor: "",
-      visitedProject: "",
-      fundingSource: ""
-    };
-
-    const crmPromise = fetch("https://portal-api.clove.build/api/tpi/website/lead", {
-      method: "POST",
-      headers: {
-        "x-api-key": "r3U2RJQOi+V1OMGKqzPJRyH0J9+3cjFY",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(data)
-    }).then((res) => {
-      if (!res.ok) throw new Error("CRM submission failed");
-      return res.json();
-    });
-
-    const emailPromise = sendLeadEmail({
+    submitLead({
       name,
       phone,
       email,
       interested,
       message,
-      sourcePage: "Let's Connect – Clubhouse Page"
-    });
-
-    Promise.all([crmPromise, emailPromise])
+      sourcePage: "Let's Connect – Clubhouse Page",
+      subSource: "Schedule Visit Form"
+    })
       .then(() => {
         bookingForm.reset();
         showTempMessage("success");
@@ -772,49 +704,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
     setLoading(enquirySubmitBtn, true);
 
-    const data = {
-      property: "Aero Villas",
-      name,
-      mobileNo: phone,
-      email,
-      interested,
-      message,
-      source: "Aerovillas Website",
-      subSource: "Side Enquiry Modal",
-      isOtpVerified: false,
-      sitevisitDate: "",
-      type: "Villas",
-      configuration: "",
-      location: "",
-      budget: "",
-      facing: "",
-      floor: "",
-      visitedProject: "",
-      fundingSource: ""
-    };
-
-    const crmPromise = fetch("https://portal-api.clove.build/api/tpi/website/lead", {
-      method: "POST",
-      headers: {
-        "x-api-key": "r3U2RJQOi+V1OMGKqzPJRyH0J9+3cjFY",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(data)
-    }).then((res) => {
-      if (!res.ok) throw new Error("CRM submission failed");
-      return res.json();
-    });
-
-    const emailPromise = sendLeadEmail({
+    submitLead({
       name,
       phone,
       email,
       interested,
       message,
-      sourcePage: "Enquiry Sidebar – Clubhouse Page"
-    });
-
-    Promise.all([crmPromise, emailPromise])
+      sourcePage: "Enquiry Sidebar – Clubhouse Page",
+      subSource: "Side Enquiry Modal"
+    })
       .then(() => {
         enquiryForm.reset();
 
