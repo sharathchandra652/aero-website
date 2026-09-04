@@ -3,8 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "description": "Aero Villas Website",
+  "scripts": {
+    "build": "echo 'Static site ready'"
+  },
   "dependencies": {
-    "nodemailer": "^6.9.14",
     "resend": "^6.26.0"
   }
 }
+
