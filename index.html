@@ -1222,33 +1222,34 @@ Enquiry Now
         e.preventDefault();
 
         const name = document.getElementById("enqName").value.trim();
-        const phone = document.getElementById("enqPhone").value.trim();
-        const email = document.getElementById("enqEmail").value.trim();
-        const interested = document.getElementById("enqInterested").value.trim();
+        const contact = document.getElementById("enqPhone").value.trim();
+        const mail = document.getElementById("enqEmail").value.trim();
+        const interestedIn = document.getElementById("enqInterested").value.trim();
         const message = document.getElementById("enqMessage").value.trim();
 
-        if (!name || !phone || !interested) {
+        if (!name || !contact || !interestedIn) {
           alert("Please fill all required fields.");
           return;
         }
 
-        if (!/^[6-9]\d{9}$/.test(phone)) {
+        if (!/^[6-9]\d{9}$/.test(contact.replace(/\D/g, ""))) {
           alert("Please enter a valid 10-digit Indian phone number starting with 6-9.");
           return;
         }
 
         setLoading(enquirySubmitBtn, true);
 
-        submitLead({
+        submitEnquiry({
           name,
-          phone,
-          email,
-          interested,
+          contact,
+          mail,
+          interestedIn,
           message,
+          leadType: "enquiry",
           sourcePage: "Enquiry Sidebar – Main Page",
           subSource: "Side Enquiry Modal"
         })
-          .then(() => {
+          .then((res) => {
             enquiryForm.reset();
 
             const offcanvas = bootstrap.Offcanvas.getInstance(enquiryOffcanvasEl);
@@ -1256,16 +1257,19 @@ Enquiry Now
               setTimeout(() => offcanvas.hide(), 300);
             }
 
+            const successText = res.message || "Thank you. Your enquiry has been received. Our sales team will contact you shortly.";
             if (enquiryToastEl) {
+              const toastBody = enquiryToastEl.querySelector('.toast-body');
+              if (toastBody) toastBody.textContent = successText;
               const toast = new bootstrap.Toast(enquiryToastEl);
               toast.show();
             } else {
-              alert(userSuccessMsg);
+              alert(successText);
             }
           })
           .catch((err) => {
             console.error("Enquiry form error:", err);
-            alert(userErrorMsg);
+            alert(err.message || "We encountered an issue submitting your enquiry. Please try again.");
           })
           .finally(() => {
             setLoading(enquirySubmitBtn, false);

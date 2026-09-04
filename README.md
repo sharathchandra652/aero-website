@@ -1,25 +1,30 @@
-# Aero Villas — Website & SMTP Mailer Service
+# Aero Villas — Website & Lead Management System
 
-Welcome to the **Aero Villas** web repository. This document serves as a complete developer guide for onboarding, understanding the codebase, setting up local development environments, configuring SMTP email delivery, and deploying to production.
+Welcome to the **Aero Villas** web repository. This document serves as the complete developer guide for onboarding, understanding the codebase architecture, setting up local development environments, configuring Microsoft Graph API email authentication, and deploying to Vercel or custom server hosts.
 
 ---
 
 ## 📌 Architectural Overview
 
-The application architecture consists of three main components:
+The application architecture consists of two main components:
 
-1. **Static Frontend**: Built using modern HTML5, CSS3, JavaScript (Bootstrap 5, Swiper, Owl Carousel, jQuery).
-2. **CRM Integration**: Lead data submitted on any form is forwarded directly to the **Clove CRM API** (`https://portal-api.clove.build/api/tpi/website/lead`).
-3. **Backend SMTP Mailer Service (`/mailer`)**: A lightweight Node.js/Express service that sends instant email notifications directly to `sales@aerovillas.in` using standard SMTP credentials configured via environment variables (`.env`).
+1. **Static Frontend**: Built using HTML5, CSS3, JavaScript (Bootstrap 5, Swiper, jQuery).
+2. **Unified Backend Lead API (`POST /api/leads`)**:
+   - Vercel Serverless Function / Node Express API ([`api/leads.js`](file:///c:/Users/USER/Desktop/aero-website/api/leads.js)).
+   - Generates unique Lead IDs in format `AV-YYYYMMDD-XXXX`.
+   - Sends formatted HTML email notifications directly to `sales@aerovillas.in` via **Microsoft Graph API**.
 
 ```
 [ Visitor Form Submission ]
          │
-         ├───► 1. Clove CRM API (Lead Management)
-         │
-         └───► 2. Local Express Backend (/send-email)
-                       │
-                       └───► 3. SMTP Server (Nodemailer) ───► sales@aerovillas.in
+         ▼
+ ┌───────────────────────┐
+ │   POST /api/leads     │  (Vercel Serverless / Express)
+ └───────────┬───────────┘
+             │
+             ├──► 1. Generate Unique Lead ID (AV-YYYYMMDD-XXXX)
+             │
+             └──► 2. Microsoft Graph API ───► sales@aerovillas.in
 ```
 
 ---
@@ -28,266 +33,116 @@ The application architecture consists of three main components:
 
 ```
 aero-website/
-├── index.html                   # Main homepage with Villa hero, features, and enquiry forms
+├── index.html                   # Homepage with Villa hero, features, and Enquiry forms
 ├── aerovillas-267sq.yrds.html   # Floor plans & details for 267 sq. yards villas
 ├── aerovillas-567sq.yrds.html   # Floor plans & details for 567 sq. yards villas
 ├── aerovillas-600sq.yrds.html   # Floor plans & details for 600 sq. yards villas
 ├── aerovillas-clubhouse.html    # Clubhouse amenities & enquiry forms
 ├── aerovillas_media.html        # Media gallery & floor plan access forms
-├── css/                         # Custom stylesheet assets
-├── fonts/ & webfonts/           # Typography icons & custom web fonts
-├── images/ & images_02/         # Property pictures, floor plans, and icons
+├── api/
+│   └── leads.js                 # Unified serverless lead handler (POST /api/leads)
+├── css/                         # Custom CSS stylesheets
 ├── js/
-│   ├── emailjs-form.js          # Shared JS helper forwarding form submissions to backend mailer
+│   ├── emailjs-form.js          # Shared JS helper sending form submissions to /api/leads
 │   ├── designesia.js            # Main template interaction scripts
 │   ├── vendors.js               # Bundled vendor scripts (Bootstrap, jQuery, etc.)
 │   └── swiper.js                # Slider animations
-├── mailer/                      # Node.js Express backend microservice
-│   ├── server.js                # Express API & Nodemailer transporter setup
-│   ├── package.json             # Backend dependencies
-│   ├── .env                     # Private environment variables (Git ignored)
-│   ├── .env.example             # Template environment variables
-│   └── .gitignore               # Ignores node_modules and .env
+├── .env.example                 # Template environment configuration
 ├── .htaccess                    # Apache web server rules (HTTPS & clean URLs)
-└── README.md                    # Developer documentation & onboarding guide
+├── package.json                 # Node dependencies for local server & serverless
+├── server.js                    # Local Express test server (serves site + mounts /api/leads)
+└── README.md                    # Developer documentation
 ```
 
 ---
 
 ## ⚙️ Environment Configuration (`.env`)
 
-The mailer service relies on environment variables stored in `mailer/.env`.
-
-### 1. Create your `.env` file
-From the project root:
-```bash
-cd mailer
-cp .env.example .env
-```
-
-### 2. Configure Credentials
-
-#### Option A: Outlook / Microsoft 365 SMTP (Recommended for sales@aerovillas.in)
-
-If `sales@aerovillas.in` is an **Outlook / Microsoft 365** email address:
+The backend lead service requires environment variables for Microsoft Graph API email delivery:
 
 ```env
-# Microsoft 365 / Outlook SMTP Configuration
-SMTP_HOST=smtp.office365.com
-SMTP_PORT=587
-SMTP_SECURE=false
-SMTP_USER=sales@aerovillas.in
-SMTP_PASS=YourOutlookPasswordHere
+# Target Recipient Email
+SALES_EMAIL=sales@aerovillas.in
 
-# Target Recipient for Form Leads
-MAIL_TO=sales@aerovillas.in
-MAIL_FROM_NAME=Aero Villas Website
+# Microsoft Graph API Authentication (Azure Entra ID)
+MICROSOFT_CLIENT_ID=your_microsoft_client_id_here
+MICROSOFT_TENANT_ID=your_microsoft_tenant_id_here
+MICROSOFT_CLIENT_SECRET=your_microsoft_client_secret_here
+MICROSOFT_REDIRECT_URI=http://localhost:3000
 
-# Express Server Port & Allowed CORS Origins
-PORT=3001
-ALLOWED_ORIGINS=https://aerovillas.in,http://localhost:5500,http://127.0.0.1:5500
+# Server Port (Local testing)
+PORT=3000
 ```
-
----
-
-### 📘 Step-by-Step Guide: Setting Up Outlook / Microsoft 365 Password
-
-#### Step 1: Open the `.env` File
-Open the file located at:
-```
-mailer/.env
-```
-
-#### Step 2: Enter Your Password
-- **Case 1: 2FA / Multi-Factor Authentication is OFF**
-  - Set `SMTP_PASS` directly to your regular Outlook / Office 365 account password:
-    ```env
-    SMTP_USER=sales@aerovillas.in
-    SMTP_PASS=YourRegularAccountPassword
-    ```
-
-- **Case 2: 2FA / Multi-Factor Authentication is ON**
-  - You must generate an **App Password**:
-    1. Log in to your Microsoft account security page: [https://mysignins.microsoft.com/security-info](https://mysignins.microsoft.com/security-info)
-    2. Click **Add sign-in method** → Choose **App password**.
-    3. Enter a label (e.g., `AeroVillas Mailer`).
-    4. Copy the generated 16-character password and paste it into `SMTP_PASS`:
-       ```env
-       SMTP_PASS=abcd-efgh-ijkl-mnop
-       ```
-
-#### Step 3: Enable "Authenticated SMTP" in Microsoft 365 (If needed)
-Microsoft 365 security defaults sometimes block SMTP authentication for individual mailboxes. If you see an authentication error when running `npm start`, enable SMTP AUTH:
-
-1. Log in to **[Microsoft 365 Admin Center](https://admin.microsoft.com)**.
-2. Go to **Users** → **Active users** → Select **`sales@aerovillas.in`**.
-3. In the right panel, click the **Mail** tab.
-4. Click **Manage email apps**.
-5. Ensure **Authenticated SMTP** is checked `[✓]`.
-6. Click **Save changes**.
-
----
-
-#### Option B: Standard Webmail / cPanel / Hostinger SMTP
-If `sales@aerovillas.in` is hosted on cPanel, Hostinger, or a custom hosting provider:
-
-```env
-SMTP_HOST=mail.aerovillas.in
-SMTP_PORT=465
-SMTP_SECURE=true
-SMTP_USER=sales@aerovillas.in
-SMTP_PASS=YourAccountPasswordHere
-
-MAIL_TO=sales@aerovillas.in
-MAIL_FROM_NAME=Aero Villas Website
-PORT=3001
-ALLOWED_ORIGINS=https://aerovillas.in,http://localhost:5500,http://127.0.0.1:5500
-```
-
-#### Option C: Google Workspace / Gmail SMTP
-If using Gmail or Google Workspace for `sales@aerovillas.in`:
-
-```env
-SMTP_HOST=smtp.gmail.com
-SMTP_PORT=587
-SMTP_SECURE=false
-SMTP_USER=sales@aerovillas.in
-SMTP_PASS=xxxx xxxx xxxx xxxx   # 16-character App Password
-
-MAIL_TO=sales@aerovillas.in
-MAIL_FROM_NAME=Aero Villas Website
-PORT=3001
-ALLOWED_ORIGINS=https://aerovillas.in,http://localhost:5500,http://127.0.0.1:5500
-```
-
-> 🔐 **Important for Gmail Users:**
-> 1. Turn on **2-Step Verification** in your Google Account.
-> 2. Go to **Security** → **App Passwords**.
-> 3. Generate an App Password for **Mail** and paste the 16-character code into `SMTP_PASS`.
 
 ---
 
 ## 🚀 Local Development Setup
 
-Follow these steps to run the complete website and backend locally:
+Follow these steps to run the complete website and backend API locally:
 
-### Step 1: Install & Start the Mailer Backend
+### 1. Install Dependencies
 ```bash
-# 1. Navigate to mailer directory
-cd mailer
-
-# 2. Install dependencies
 npm install
-
-# 3. Start server in development mode
-npm run dev     # (uses nodemon) OR: npm start
 ```
 
-Upon starting, you will see output in your console:
-```
-🚀 Aero Villas Mailer running on http://localhost:3001
-   POST /send-email  – accepts form submissions
-   GET  /health      – health check
-
-✅ SMTP connection established. Ready to send emails.
-```
-
-### Step 2: Serve the Static Frontend
-You can serve the workspace root using any static file server, such as **VS Code Live Server** or `npx serve`:
-
+### 2. Start the Local Development Server
 ```bash
-# Run from project root
-npx serve .
+npm start
 ```
 
-Open `http://localhost:3000` (or `http://127.0.0.1:5500` in Live Server) in your browser.
+Console output:
+```
+🚀 Aero Villas Local Server running on http://localhost:3000
+   POST http://localhost:3000/api/leads
+```
+
+Open `http://localhost:3000` in your browser.
 
 ---
 
-## 🧪 Testing Lead Submissions
+## 🧪 Lead Submission Format
 
-1. Open the site in your browser.
-2. Fill out any **Let's Connect** form, **Enquiry Now** sidebar, or **Brochure Download** form.
-3. Submit the form.
-4. **Expected Behavior**:
-   - The UI displays a success confirmation toast / message.
-   - The lead is saved in **Clove CRM**.
-   - Your mailer backend console logs: `📧 Email sent to sales@aerovillas.in | Lead: <Name> (<Phone>)`.
-   - An email lands in `sales@aerovillas.in` containing formatted lead details.
+Both Enquiry and Schedule Visit forms submit to:
+
+`POST /api/leads`
+
+### JSON Payload:
+```json
+{
+  "name": "Customer Name",
+  "contact": "9876543210",
+  "mail": "customer@example.com",
+  "interestedIn": "567 sq.yards",
+  "message": "Enquiry message here",
+  "leadType": "enquiry",
+  "source": "website",
+  "page": "/"
+}
+```
+
+### Expected Success Response:
+```json
+{
+  "success": true,
+  "message": "Enquiry received",
+  "leadId": "AV-20260904-1234"
+}
+```
 
 ---
 
 ## 🌐 Production Deployment Guide
 
-### 1. Deploying the Mailer Microservice (`mailer/`)
-
-The Node.js backend must run as a continuous background process on your server.
-
-#### Method A: VPS / Dedicated Server (Ubuntu/Debian via PM2)
-```bash
-# SSH into your server
-cd /var/www/aero-website/mailer
-
-# Install dependencies
-npm install --production
-
-# Install PM2 globally (if not already installed)
-npm install -g pm2
-
-# Start the mailer service with PM2
-pm2 start server.js --name "aerovillas-mailer"
-
-# Ensure PM2 restarts automatically on server reboot
-pm2 save
-pm2 startup
-```
-
-#### Method B: cPanel / Hostinger Node.js App Manager
-1. In cPanel or Hostinger Dashboard, go to **Setup Node.js App**.
-2. Click **Create Application**.
-3. Set **Node.js Version** to `18.x` or `20.x`.
-4. Set **Application root** to `mailer`.
-5. Set **Application startup file** to `server.js`.
-6. Add Environment Variables under **Environment Variables**:
-   - `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS`, `MAIL_TO`, `PORT`, `ALLOWED_ORIGINS`.
-7. Click **Run NPM Install** and then **Start App**.
-
----
-
-### 2. Connecting Frontend to Production Backend
-
-In [`js/emailjs-form.js`](file:///c:/Users/USER/Desktop/aero-website/js/emailjs-form.js), update line 15 with your production mailer URL:
-
-```javascript
-const MAILER_URL = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
-  ? "http://localhost:3001/send-email"
-  : "https://mail.aerovillas.in/send-email"; // ← Update to your live mailer endpoint URL
-```
-
----
-
-### 3. Deploying Static Frontend Files
-Upload all static root assets (`.html`, `css/`, `js/`, `images/`, `fonts/`, `.htaccess`) to your domain's web root directory (e.g., `public_html/`).
-
-`.htaccess` is already configured for:
-- Auto-redirecting HTTP to HTTPS.
-- Redirecting `www` to non-www (`https://aerovillas.in/`).
-- Removing trailing `index.html` from URL bar.
-
----
-
-## 🛠️ Onboarding Checklist for New Developers
-
-When taking over or making changes to this codebase:
-
-- [ ] Clone the repository locally.
-- [ ] Run `cd mailer && cp .env.example .env` and insert test SMTP credentials.
-- [ ] Run `npm install` inside `/mailer` and verify startup logs.
-- [ ] Test form submission locally and confirm email receipt.
-- [ ] Keep `.env` out of version control at all times! Never commit passwords or secret keys.
-- [ ] When modifying form logic, ensure both **Clove CRM API** fetch call and `sendLeadEmail()` helper are preserved.
+### Deploying to Vercel
+1. Connect your GitHub repository (`sharathchandra652/aero-website`) to Vercel.
+2. In Vercel Project Settings → **Environment Variables**, add:
+   - `SALES_EMAIL`
+   - `MICROSOFT_CLIENT_ID`
+   - `MICROSOFT_TENANT_ID`
+   - `MICROSOFT_CLIENT_SECRET`
+3. Vercel automatically detects [`api/leads.js`](file:///c:/Users/USER/Desktop/aero-website/api/leads.js) as a Serverless Function handling `POST /api/leads`.
 
 ---
 
 ## 📞 Support & Maintenance
-For questions or issues regarding form submission handlers or SMTP mailer logic, check backend logs via `pm2 logs aerovillas-mailer` or contact the lead backend developer.
+For questions or issues regarding form submission handlers or Microsoft Graph API setup, check logs via `npm start` or contact the lead web developer.

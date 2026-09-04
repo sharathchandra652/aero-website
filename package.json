@@ -1,0 +1,15 @@
+{
+  "name": "aero-website",
+  "version": "1.0.0",
+  "description": "Aero Villas Website & Lead Management API",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "express": "^4.19.2",
+    "nodemailer": "^10.0.0"
+  }
+}
