@@ -1662,8 +1662,26 @@
     });
   });
 
+  /* --------------------------------------------------
+   * preloader - fade out on DOMContentLoaded, with safety timeout
+   * --------------------------------------------------*/
+  function hidePreloader() {
+    jQuery("#de-loader").stop(true).fadeOut(500);
+  }
+
+  // Fade preloader as soon as DOM is ready (don't wait for heavy iframes)
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", hidePreloader);
+  } else {
+    hidePreloader();
+  }
+
+  // Safety net: force-hide after 4 seconds no matter what
+  setTimeout(hidePreloader, 4000);
+
+  // Original: also re-init on window load (for isotope/masonry)
   $(window).on("load", function () {
-    jQuery("#de-loader").fadeOut(500);
+    hidePreloader();
     filter_gallery();
     load_owl();
     window.dispatchEvent(new Event("resize"));
