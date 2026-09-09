@@ -12,6 +12,7 @@
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
   <link rel="preconnect" href="https://www.googletagmanager.com">
   <link rel="preconnect" href="https://iframe.mediadelivery.net">
+  <link rel="preload" as="image" href="./images/background/Pattern.webp">
 
   <!-- Canonical URL -->
   <link rel="canonical" href="https://aerovillas.in/">
@@ -772,8 +773,8 @@
     <section id=section-hero class="section-dark text-light no-top no-bottom relative overflow-hidden jarallax"
       style=height:auto;position:relative>
       <div style="position:relative;padding-top:56.25%;"><iframe loading="lazy"
-          src="https://iframe.mediadelivery.net/embed/479573/4b49564d-3367-4637-8b64-69f62c335305?autoplay=true&loop=true&muted=true&preload=true&responsive=true"
-          loading="lazy" style="border:0;position:absolute;top:0;height:100%;width:100%;"
+          src="https://iframe.mediadelivery.net/embed/479573/4b49564d-3367-4637-8b64-69f62c335305?autoplay=true&loop=true&muted=true&preload=false&responsive=true"
+          style="border:0;position:absolute;top:0;height:100%;width:100%;"
           allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;" allowfullscreen="true"></iframe>
       </div>
       <div class="gradient-edge-top op-6"></div>
@@ -906,7 +907,6 @@ Schedule a Visit
         </div>
       </div>
     </div>
-  </div>
   <!-- need to attach Enquiry button -->
   <!-- <section class=container-fluid>
 <button class="btn-main position-fixed d-flex align-items-center justify-content-center" style="top:50%;right:-58px;transform:translateY(-50%) rotate(-90deg);transform-origin:center center;z-index:1050;border-radius:6px 6px 0 0;padding:8px 16px;font-size:14px;line-height:1.2;white-space:nowrap;color:#fff" type=button data-bs-toggle=offcanvas data-bs-target=#enquiryOffcanvas aria-controls=enquiryOffcanvas>
@@ -1012,7 +1012,7 @@ Enquiry Now
   </div>
 
   <!-- section footer -->
-  <footer class=section-dark style="background-image:url(./images/background/Pattern.webp);background-size:cover">
+  <footer class=section-dark style="background-color:#2a1040;background-image:url(./images/background/Pattern.webp);background-size:cover">
     <div class=container>
       <div class="row gx-5 justify-content-center">
         <div class=col-lg-8>
@@ -1078,6 +1078,7 @@ Enquiry Now
       </div>
     </div>
   </footer>
+  </div><!-- close #wrapper -->
   <script src="js/vendors.js"></script>
   <!-- Aero Villas SMTP mailer helper -->
   <script src="js/emailjs-form.js"></script>
