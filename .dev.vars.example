@@ -1,0 +1,7 @@
+# Local secrets for `npm run preview` (wrangler dev). Copy to .dev.vars and fill in.
+# In production set the same names as Worker secrets in the Cloudflare dashboard.
+SALES_EMAIL=sales@aerovillas.in
+SMTP_HOST=smtp.example.com
+SMTP_PORT=587
+SMTP_USER=your_smtp_username@example.com
+SMTP_PASS=your_smtp_password_here

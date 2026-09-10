@@ -1,0 +1,3 @@
+# Files inside public/ that must not be uploaded as static assets (gitignore syntax).
+.DS_Store
+Thumbs.db

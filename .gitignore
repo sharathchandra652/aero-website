@@ -13,3 +13,9 @@ node_modules/
 # Operating system files
 .DS_Store
 Thumbs.db
+
+# Cloudflare Wrangler
+.wrangler/
+.dev.vars
+.dev.vars.*
+!.dev.vars.example
