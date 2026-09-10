@@ -19,8 +19,8 @@ app.use(express.urlencoded({ extended: true }));
 app.post('/api/leads', leadsHandler);
 app.options('/api/leads', leadsHandler);
 
-// Serve static frontend root
-app.use(express.static(path.join(__dirname)));
+// Serve static frontend from public/ (same folder Cloudflare uploads as static assets)
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.listen(PORT, () => {
   console.log(`🚀 Aero Villas Local Server running on http://localhost:${PORT}`);
