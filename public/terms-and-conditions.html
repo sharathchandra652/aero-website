@@ -4,14 +4,15 @@
 
 <head>
   <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LN8S7X9FGB"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PZ8S6B50M8"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
 
-    gtag('config', 'G-LN8S7X9FGB');
+    gtag('config', 'G-PZ8S6B50M8');
   </script>
+  <script src="js/analytics.js" defer></script>
 
   <title>Terms &amp; Conditions | Aero Villas Shamshabad</title>
   <link rel="icon" href="./images/Aero Villas updated Logo.png" style="height: 25px; width: 35px" type="image/gif"
@@ -63,14 +64,15 @@
     ================================================== -->
   <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" id="bootstrap" />
   <link href="css/plugins.css" rel="stylesheet" type="text/css" />
-  <link href="css/swiper.css" rel="stylesheet" type="text/css" />
   <link href="css/style.css" rel="stylesheet" type="text/css" />
   <link href="css/coloring.css" rel="stylesheet" type="text/css" />
+  <link href="css/swiper.css" rel="stylesheet" type="text/css" />
   <link href="css/t&p.css" rel="stylesheet" type="text/css" />
   <!-- custom-css -->
   <link href="css/swiper-custom-1.css" rel="stylesheet" type="text/css" />
   <!-- color scheme -->
   <link id="colors" href="css/colors/scheme-01.css" rel="stylesheet" type="text/css" />
+  <style>#logo img, img.w-200px { height: auto; }</style>
 </head>
 
 <body>
@@ -93,9 +95,9 @@
                 <!-- logo begin -->
                 <div id="logo">
                   <a href="index.html">
-                    <img class="logo-main" src="images/Aero Villas updated Logo 1.png" alt="Aero Villas Logo" />
-                    <img class="logo-scroll" src="images/Aero Villas updated Logo 1.png" alt="Aero Villas Logo" />
-                    <img class="logo-mobile" src="images/Aero Villas updated Logo 1.png" alt="Aero Villas Logo" />
+                    <img class="logo-main" src="images/optimized/logo-400w.webp" srcset="images/optimized/logo-400w.webp 400w, images/optimized/logo-800w.webp 800w" sizes="200px" width="400" height="184" decoding="async" alt="Aero Villas Logo" />
+                    <img class="logo-scroll" src="images/optimized/logo-400w.webp" srcset="images/optimized/logo-400w.webp 400w, images/optimized/logo-800w.webp 800w" sizes="200px" width="400" height="184" decoding="async" alt="Aero Villas Logo" />
+                    <img class="logo-mobile" src="images/optimized/logo-400w.webp" srcset="images/optimized/logo-400w.webp 400w, images/optimized/logo-800w.webp 800w" sizes="200px" width="400" height="184" decoding="async" alt="Aero Villas Logo" />
                   </a>
                 </div>
                 <!-- logo close -->
@@ -293,7 +295,7 @@
         <div class="row gx-5 justify-content-center">
           <div class="col-lg-8">
             <div class="text-center">
-              <img src="images/Aero Villas updated Logo 1.png" class="w-200px" alt="" />
+              <img src="images/optimized/logo-400w.webp" srcset="images/optimized/logo-400w.webp 400w, images/optimized/logo-800w.webp 800w" sizes="200px" width="400" height="184" loading="lazy" decoding="async" class="w-200px" alt="Aero Villas Logo" />
               <div class="spacer-single"></div>
               <a href="https://maps.app.goo.gl/FvuTJ5NSJN8tFr7E8" class="fs-16">
                 Neha Hills, Satamrai Colony, Shamshabad<br />
@@ -365,10 +367,11 @@
     <!-- Javascript Files
     ================================================== -->
 
-    <script src="js/vendors.js"></script>
-    <script src="js/designesia.js"></script>
-    <script src="js/swiper.js"></script>
-    <script src="js/custom-swiper-2.js"></script>
+    <script src="js/vendors.js" defer></script>
+    <script src="js/emailjs-form.js" defer></script>
+    <script src="js/designesia.js" defer></script>
+    <script src="js/swiper.js" defer></script>
+    <script src="js/custom-swiper-2.js" defer></script>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         function setLoading(btn, isLoading, loadingText = "Submitting...") {

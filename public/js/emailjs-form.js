@@ -65,6 +65,15 @@ function submitEnquiry(params) {
         return Promise.reject(new Error(userMsg));
       }
 
+      // Preserve GA4 lead tracking event (Only on success, strictly no PII)
+      if (typeof window !== 'undefined' && typeof window.trackLeadGeneration === 'function') {
+        window.trackLeadGeneration({
+          formName: payload.leadType || payload.source || 'enquiry',
+          villaType: payload.interestedIn || 'General',
+          page: payload.page
+        });
+      }
+
       return {
         success: true,
         message: "Thank you. Your enquiry has been received. Our sales team will contact you shortly."
