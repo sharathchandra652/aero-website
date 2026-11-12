@@ -50,6 +50,10 @@ function submitEnquiry(params) {
     },
     body: JSON.stringify(payload)
   })
+    .catch((err) => {
+      console.error("[AeroVillas Form Network Error]:", err.message);
+      throw new Error("Unable to connect to the enquiry service. Please try again later.");
+    })
     .then(async (response) => {
       let data;
       try {
@@ -58,11 +62,11 @@ function submitEnquiry(params) {
         data = { success: false, message: "Unable to process enquiry" };
       }
 
-      if (!response.ok || !data || data.success !== true) {
-        const userMsg = (data && data.message && data.message !== "Unable to process enquiry") 
-          ? data.message 
+      if (!response.ok || !data || data.success !== true || data.emailSent === false) {
+        const userMsg = (data && data.message && data.message !== "Unable to process enquiry" && data.message !== "Enquiry received")
+          ? data.message
           : "We encountered an issue submitting your enquiry. Please try again.";
-        return Promise.reject(new Error(userMsg));
+        throw new Error(userMsg);
       }
 
       // Preserve GA4 lead tracking event (Only on success, strictly no PII)
@@ -78,11 +82,6 @@ function submitEnquiry(params) {
         success: true,
         message: "Thank you. Your enquiry has been received. Our sales team will contact you shortly."
       };
-    })
-    .catch((err) => {
-      // If network fetch fails (e.g. backend server down), handle error gracefully
-      console.error("[AeroVillas Form Error]:", err.message);
-      return Promise.reject(new Error("Unable to connect to the enquiry service. Please ensure the backend server is running or try again later."));
     });
 }
 

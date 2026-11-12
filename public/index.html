@@ -1170,7 +1170,7 @@ Enquiry Now
           })
           .catch((err) => {
             console.error("Brochure form error:", err);
-            alert(userErrorMsg);
+            alert(err.message || "We encountered an issue submitting your enquiry. Please try again.");
           })
           .finally(() => {
             setLoading(brochureSubmitBtn, false);
