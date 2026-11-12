@@ -109,25 +109,28 @@ async function handleLeads(request, env) {
 
     console.log(`[AeroVillas API] Lead ID generated: ${lead.leadId} | Name: ${lead.name} | Contact: ${lead.contact}`);
 
-    let emailSent = false;
-    let emailErrorMsg = null;
-
     try {
       const to = await sendLeadEmail(env, lead);
-      emailSent = true;
       console.log(`[AeroVillas Email] Email sent successfully to ${to} for Lead ${lead.leadId}`);
+      return json({
+        success: true,
+        message: 'Enquiry received',
+        leadId: lead.leadId,
+        emailSent: true
+      });
     } catch (emailErr) {
-      emailErrorMsg = emailErr && emailErr.message ? emailErr.message : String(emailErr);
+      const emailErrorMsg = emailErr && emailErr.message ? emailErr.message : String(emailErr);
       console.error(`[AeroVillas Email Error] Email dispatch failed for Lead ${lead.leadId}:`, emailErrorMsg);
+      return json(
+        {
+          success: false,
+          message: 'Unable to send enquiry at the moment. Please try again later.',
+          leadId: lead.leadId,
+          emailSent: false
+        },
+        502
+      );
     }
-
-    return json({
-      success: true,
-      message: 'Enquiry received',
-      leadId: lead.leadId,
-      emailSent,
-      ...(emailErrorMsg ? { emailError: emailErrorMsg } : {})
-    });
   } catch (err) {
     console.error('[AeroVillas API Server Error]:', err);
     return json({ success: false, message: 'Unable to process enquiry' }, 500);
