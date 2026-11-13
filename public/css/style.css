@@ -930,7 +930,24 @@ header.header-light #mainmenu a {
 }
 
 #mainmenu li a.active {
-  color: var(--primary-color) !important;
+  color: #ffffff !important;
+  text-decoration: underline 2px solid var(--primary-color) !important;
+  text-underline-offset: 4px;
+}
+
+#mainmenu li ul {
+  background: var(--bg-dark-1, #1e1e1e);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+#mainmenu li ul li a {
+  color: #ffffff !important;
+}
+
+#mainmenu li ul li a:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff !important;
 }
 
 #mainmenu li ul {
