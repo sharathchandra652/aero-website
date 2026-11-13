@@ -14785,3 +14785,32 @@ img {
     width: auto;
   }
 }
+
+/* Task 2: In-page shortcut row for villa and clubhouse pages */
+.villa-quick-nav {
+  background: #111111;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  z-index: 5;
+}
+.villa-quick-nav .btn-pill {
+  display: inline-block;
+  padding: 6px 20px;
+  margin: 4px 6px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 30px;
+  background: transparent;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+.villa-quick-nav .btn-pill:hover {
+  color: #ffffff;
+  border-color: var(--primary-color);
+  background: rgba(105, 0, 137, 0.25);
+}
