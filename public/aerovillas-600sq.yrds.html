@@ -789,7 +789,7 @@ Telangana 501218
 <script src="js/emailjs-form.js" defer></script>
 <script src="js/designesia.js" defer></script>
 <script>document.addEventListener("DOMContentLoaded",function(){if(window.jQuery&&jQuery.fn.owlCarousel){$("#room-carousel").owlCarousel({loop:!0,autoplay:!0,autoplayTimeout:2e3,autoplayHoverPause:!0})}});</script>
-<script>document.getElementById("access-form")?.addEventListener("submit",(function(e){e.preventDefault();const t=document.getElementById("name").value.trim(),o=document.getElementById("number").value.trim();if(!t||!o)return void alert("Please fill in both Name and Phone Number.");if(!/^[6-9]\d{9}$/.test(o))return void alert("Please enter a valid 10-digit Indian phone number starting with 6-9.");submitLead({name:t,phone:o,interested:"600 Floorplans",sourcePage:"Floorplan Access Form – 600 Sq.Yds",subSource:"Floorplan Access Form"}).then((()=>{document.getElementById("access-form").style.display="none";const e=document.getElementById("floorplan-carousel");e.classList.remove("blurred"),e.classList.add("unblurred")})).catch((e=>{alert("Sorry, there was an error sending your form. Please try again."),console.error("Floorplan form error:",e)}))}))</script>
+<script>document.getElementById("access-form")?.addEventListener("submit",(function(e){e.preventDefault();const t=document.getElementById("name").value.trim(),o=document.getElementById("number").value.trim();if(!t||!o)return void alert("Please fill in both Name and Phone Number.");if(!isValidPhone(o))return void alert("Please enter a valid phone number with country code if outside India.");submitLead({name:t,phone:o,interested:"600 Floorplans",sourcePage:"Floorplan Access Form – 600 Sq.Yds",subSource:"Floorplan Access Form"}).then((()=>{document.getElementById("access-form").style.display="none";const e=document.getElementById("floorplan-carousel");e.classList.remove("blurred"),e.classList.add("unblurred")})).catch((e=>{alert("Sorry, there was an error sending your form. Please try again."),console.error("Floorplan form error:",e)}))}))</script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   function setLoading(btn, isLoading, loadingText = "Submitting...") {
@@ -830,8 +830,8 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    if (!/^[6-9]\d{9}$/.test(phone)) {
-      alert("Please enter a valid 10-digit Indian phone number starting with 6-9.");
+    if (!isValidPhone(phone)) {
+      alert("Please enter a valid phone number with country code if outside India.");
       return;
     }
 
@@ -903,8 +903,8 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    if (!/^[6-9]\d{9}$/.test(phone)) {
-      alert("Please enter a valid 10-digit Indian phone number starting with 6-9.");
+    if (!isValidPhone(phone)) {
+      alert("Please enter a valid phone number with country code if outside India.");
       return;
     }
 
@@ -958,8 +958,8 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    if (!/^[6-9]\d{9}$/.test(phone)) {
-      alert("Please enter a valid 10-digit Indian phone number starting with 6-9.");
+    if (!isValidPhone(phone)) {
+      alert("Please enter a valid phone number with country code if outside India.");
       return;
     }
 

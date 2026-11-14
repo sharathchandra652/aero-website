@@ -344,15 +344,14 @@
           const number = document.getElementById("numberbro").value.trim();
           const interested = document.getElementById("interestedbro").value.trim();
           const message = document.getElementById("description").value.trim();
-          const phonePattern = /^[6-9]\d{9}$/;
 
           if (!name || !number) {
             alert("Please fill in both Name and Phone Number.");
             return;
           }
 
-          if (!phonePattern.test(number)) {
-            alert("Please enter a valid 10-digit Indian phone number starting with 6-9.");
+          if (!isValidPhone(number)) {
+            alert("Please enter a valid phone number with country code if outside India.");
             return;
           }
 
@@ -406,7 +405,7 @@
           const message = document.getElementById("message").value.trim();
 
           if (!name || !phone) { alert("Please fill all required fields."); return; }
-          if (!/^[6-9]\d{9}$/.test(phone)) { alert("Please enter a valid 10-digit Indian phone number starting with 6-9."); return; }
+          if (!isValidPhone(phone)) { alert("Please enter a valid phone number with country code if outside India."); return; }
 
           setLoading(bookingSubmitBtn, true);
 
@@ -436,7 +435,7 @@
           const message = document.getElementById("enqMessage").value.trim();
 
           if (!name || !phone || !interested) { alert("Please fill all required fields."); return; }
-          if (!/^[6-9]\d{9}$/.test(phone)) { alert("Please enter a valid 10-digit Indian phone number starting with 6-9."); return; }
+          if (!isValidPhone(phone)) { alert("Please enter a valid phone number with country code if outside India."); return; }
 
           setLoading(enquirySubmitBtn, true);
 

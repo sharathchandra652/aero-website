@@ -618,8 +618,8 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    if (!/^[6-9]\d{9}$/.test(phone)) {
-      alert("Please enter a valid 10-digit Indian phone number starting with 6-9.");
+    if (!isValidPhone(phone)) {
+      alert("Please enter a valid phone number with country code if outside India.");
       return;
     }
 
@@ -691,8 +691,8 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    if (!/^[6-9]\d{9}$/.test(phone)) {
-      alert("Please enter a valid 10-digit Indian phone number starting with 6-9.");
+    if (!isValidPhone(phone)) {
+      alert("Please enter a valid phone number with country code if outside India.");
       return;
     }
 
@@ -746,8 +746,8 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    if (!/^[6-9]\d{9}$/.test(phone)) {
-      alert("Please enter a valid 10-digit Indian phone number starting with 6-9.");
+    if (!isValidPhone(phone)) {
+      alert("Please enter a valid phone number with country code if outside India.");
       return;
     }
 

@@ -1,3 +1,14 @@
+
+function isValidPhone(value) {
+  if (!value || typeof value !== 'string') return false;
+  const cleaned = value.trim().replace(/^\+/, '').replace(/[\s\-\(\)\[\]\.]/g, '');
+  return /^\d{10,15}$/.test(cleaned);
+}
+
+if (typeof window !== 'undefined') {
+  window.isValidPhone = isValidPhone;
+}
+
 /**
  * Aero Villas — Unified Client Lead Submission Helper
  * Submits Enquiry Form payloads to POST /api/leads
@@ -33,7 +44,7 @@ function submitEnquiry(params) {
 
   const cleanContact = payload.contact.replace(/\D/g, "");
   if (!cleanContact || cleanContact.length < 10) {
-    return Promise.reject(new Error("Please enter a valid 10-digit phone number."));
+    return Promise.reject(new Error("Please enter a valid phone number with country code if outside India."));
   }
 
   if (payload.mail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.mail)) {
