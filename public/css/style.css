@@ -14816,43 +14816,17 @@ img {
 }
 
 
-/* Task 3: Floating WhatsApp Button */
-.whatsapp-float {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  width: 56px;
-  height: 56px;
-  background-color: #25D366;
-  color: #ffffff !important;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 30px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
-  z-index: 1040;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-  text-decoration: none;
-}
-.whatsapp-float:hover {
-  transform: scale(1.08);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
-  color: #ffffff !important;
-}
-.whatsapp-float i {
-  color: #ffffff;
-  line-height: 1;
-}
-@media (max-width: 767px) {
-  .whatsapp-float {
-    width: 50px;
-    height: 50px;
-    bottom: 18px;
-    right: 16px;
-    font-size: 26px;
-  }
-}
+/* Bug 2: Floating WhatsApp Button & Toast Overlap Fix */
+.whatsapp-float{position:fixed;right:24px;bottom:24px;width:56px;height:56px;
+  border-radius:50%;background:#25D366;color:#fff;display:flex;align-items:center;
+  justify-content:center;font-size:30px;line-height:1;text-decoration:none;
+  box-shadow:0 4px 12px rgba(0,0,0,.3);z-index:1040;transition:transform .2s ease}
+.whatsapp-float:hover{transform:scale(1.08);color:#fff}
+.whatsapp-float i{color:#fff}
+@media (max-width:767px){.whatsapp-float{right:16px;bottom:18px;width:50px;
+  height:50px;font-size:26px}}
+
+.toast:not(.show){display:none !important}
 
 
 /* Exclusive Enquiry Side Tab & Panel (Task 5) */
