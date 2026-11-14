@@ -930,7 +930,24 @@ header.header-light #mainmenu a {
 }
 
 #mainmenu li a.active {
-  color: var(--primary-color) !important;
+  color: #ffffff !important;
+  text-decoration: underline 2px solid var(--primary-color) !important;
+  text-underline-offset: 4px;
+}
+
+#mainmenu li ul {
+  background: var(--bg-dark-1, #1e1e1e);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+#mainmenu li ul li a {
+  color: #ffffff !important;
+}
+
+#mainmenu li ul li a:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff !important;
 }
 
 #mainmenu li ul {
@@ -14767,4 +14784,197 @@ img {
     margin-left: auto;
     width: auto;
   }
+}
+
+/* Task 2: In-page shortcut row for villa and clubhouse pages */
+.villa-quick-nav {
+  background: #111111;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  z-index: 5;
+}
+.villa-quick-nav .btn-pill {
+  display: inline-block;
+  padding: 6px 20px;
+  margin: 4px 6px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 30px;
+  background: transparent;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+.villa-quick-nav .btn-pill:hover {
+  color: #ffffff;
+  border-color: var(--primary-color);
+  background: rgba(105, 0, 137, 0.25);
+}
+
+
+/* Bug 2: Floating WhatsApp Button & Toast Overlap Fix */
+.whatsapp-float{position:fixed;right:24px;bottom:24px;width:56px;height:56px;
+  border-radius:50%;background:#25D366;color:#fff;display:flex;align-items:center;
+  justify-content:center;font-size:30px;line-height:1;text-decoration:none;
+  box-shadow:0 4px 12px rgba(0,0,0,.3);z-index:1040;transition:transform .2s ease}
+.whatsapp-float:hover{transform:scale(1.08);color:#fff}
+.whatsapp-float i{color:#fff}
+@media (max-width:767px){.whatsapp-float{right:16px;bottom:18px;width:50px;
+  height:50px;font-size:26px}}
+
+.toast:not(.show){display:none !important}
+
+
+/* Exclusive Enquiry Side Tab & Panel (Task 5) */
+.enquiry-side-tab {
+  position: fixed;
+  top: 50%;
+  right: -58px;
+  transform: translateY(-50%) rotate(-90deg);
+  transform-origin: center center;
+  z-index: 1050;
+  border-radius: 6px 6px 0 0;
+  padding: 8px 16px;
+  font-size: 14px;
+  line-height: 1.2;
+  white-space: nowrap;
+  color: #fff;
+}
+
+.exclusive-enquiry-panel {
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  bottom: auto !important;
+  right: auto !important;
+  transform: translate(-50%, -50%) !important;
+  width: 90% !important;
+  max-width: 480px !important;
+  height: auto !important;
+  max-height: 90vh !important;
+  min-height: auto !important;
+  background-image: url(../images/background/blured_form_image.webp) !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  background-color: #1a1528 !important;
+  border-radius: 12px !important;
+  z-index: 1055 !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  overflow: hidden !important;
+  transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease !important;
+}
+
+.exclusive-enquiry-panel:not(.show) {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transform: translate(-50%, -50%) scale(0.95) !important;
+  pointer-events: none !important;
+}
+
+.exclusive-enquiry-panel.show {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translate(-50%, -50%) scale(1) !important;
+  pointer-events: auto !important;
+}
+
+.exclusive-enquiry-header {
+  padding: 20px 24px 12px 24px !important;
+  margin-top: 0 !important;
+  border-bottom: none !important;
+  background: transparent !important;
+}
+
+.exclusive-enquiry-header .offcanvas-title {
+  color: #ffffff !important;
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.2px;
+}
+
+.exclusive-enquiry-header .btn-close {
+  filter: invert(1) !important;
+  opacity: 0.75 !important;
+  transition: opacity 0.2s ease;
+}
+
+.exclusive-enquiry-header .btn-close:hover {
+  opacity: 1 !important;
+}
+
+.exclusive-enquiry-body {
+  padding: 8px 24px 24px 24px !important;
+  overflow-y: auto !important;
+  background: transparent !important;
+}
+
+.exclusive-enquiry-body::-webkit-scrollbar {
+  width: 4px;
+}
+.exclusive-enquiry-body::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 4px;
+}
+
+.exclusive-enquiry-panel .form-label {
+  color: #ffffff !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  margin-bottom: 6px !important;
+}
+
+.exclusive-enquiry-panel .form-control {
+  background-color: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 8px !important;
+  color: #ffffff !important;
+  font-size: 14px !important;
+  padding: 10px 14px !important;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.exclusive-enquiry-panel .form-control:focus {
+  background-color: rgba(255, 255, 255, 0.12) !important;
+  border-color: rgba(255, 255, 255, 0.45) !important;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+  outline: none !important;
+}
+
+.exclusive-enquiry-panel select.form-control {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 14px center !important;
+  background-size: 14px 10px !important;
+  padding-right: 36px !important;
+}
+
+.exclusive-enquiry-panel select.form-control option {
+  background-color: #24143a !important;
+  color: #ffffff !important;
+}
+
+.exclusive-enquiry-panel textarea.form-control {
+  resize: none !important;
+}
+
+.exclusive-enquiry-panel .btn-main {
+  width: 100% !important;
+  padding: 12px 24px !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  border-radius: 8px !important;
+  margin-top: 8px !important;
+}
+
+.offcanvas-backdrop.show {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  background-color: rgba(0, 0, 0, 0.6) !important;
 }

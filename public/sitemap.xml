@@ -6,50 +6,50 @@
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 
 <url>
-  <loc>https://aerovillas.in/</loc>
-  <lastmod>2026-11-12T00:00:00+00:00</lastmod>
+  <loc>https://www.aerovillas.in/</loc>
+  <lastmod>2026-11-14T00:00:00+00:00</lastmod>
   <changefreq>weekly</changefreq>
   <priority>1.00</priority>
 </url>
 <url>
-  <loc>https://aerovillas.in/aerovillas-267sq.yrds.html</loc>
-  <lastmod>2026-11-12T00:00:00+00:00</lastmod>
+  <loc>https://www.aerovillas.in/aerovillas-267sq.yrds</loc>
+  <lastmod>2026-11-14T00:00:00+00:00</lastmod>
   <changefreq>monthly</changefreq>
   <priority>0.90</priority>
 </url>
 <url>
-  <loc>https://aerovillas.in/aerovillas-567sq.yrds.html</loc>
-  <lastmod>2026-11-12T00:00:00+00:00</lastmod>
+  <loc>https://www.aerovillas.in/aerovillas-567sq.yrds</loc>
+  <lastmod>2026-11-14T00:00:00+00:00</lastmod>
   <changefreq>monthly</changefreq>
   <priority>0.90</priority>
 </url>
 <url>
-  <loc>https://aerovillas.in/aerovillas-600sq.yrds.html</loc>
-  <lastmod>2026-11-12T00:00:00+00:00</lastmod>
+  <loc>https://www.aerovillas.in/aerovillas-600sq.yrds</loc>
+  <lastmod>2026-11-14T00:00:00+00:00</lastmod>
   <changefreq>monthly</changefreq>
   <priority>0.90</priority>
 </url>
 <url>
-  <loc>https://aerovillas.in/aerovillas-clubhouse.html</loc>
-  <lastmod>2026-11-12T00:00:00+00:00</lastmod>
+  <loc>https://www.aerovillas.in/aerovillas-clubhouse</loc>
+  <lastmod>2026-11-14T00:00:00+00:00</lastmod>
   <changefreq>monthly</changefreq>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://aerovillas.in/aerovillas_media.html</loc>
-  <lastmod>2026-11-12T00:00:00+00:00</lastmod>
+  <loc>https://www.aerovillas.in/aerovillas_media</loc>
+  <lastmod>2026-11-14T00:00:00+00:00</lastmod>
   <changefreq>weekly</changefreq>
   <priority>0.70</priority>
 </url>
 <url>
-  <loc>https://aerovillas.in/privacy-policy.html</loc>
-  <lastmod>2026-11-12T00:00:00+00:00</lastmod>
+  <loc>https://www.aerovillas.in/privacy-policy</loc>
+  <lastmod>2026-11-14T00:00:00+00:00</lastmod>
   <changefreq>yearly</changefreq>
   <priority>0.30</priority>
 </url>
 <url>
-  <loc>https://aerovillas.in/terms-and-conditions.html</loc>
-  <lastmod>2026-11-12T00:00:00+00:00</lastmod>
+  <loc>https://www.aerovillas.in/terms-and-conditions</loc>
+  <lastmod>2026-11-14T00:00:00+00:00</lastmod>
   <changefreq>yearly</changefreq>
   <priority>0.30</priority>
 </url>
