@@ -1147,11 +1147,7 @@ Schedule a Visit
         if (errorMessage) errorMessage.style.display = "none";
       });
 
-      </script>
-
-  <!-- Duplicate Swiper CDN script removed: local js/swiper.js (Swiper 11.1.12) is already loaded -->
-  <script src=js/custom-swiper-2.js defer>
-  // === Enquiry Form (Offcanvas / Side Modal) ===
+      // === Enquiry Form (Offcanvas / Side Modal) ===
   const enquiryForm = document.getElementById("enquiryForm");
   const enquirySubmitBtn = enquiryForm?.querySelector("button[type='submit']");
   const enquiryOffcanvasEl = document.getElementById("enquiryOffcanvas");
@@ -1215,8 +1211,12 @@ Schedule a Visit
       .finally(() => {
         setLoading(enquirySubmitBtn, false);
       });
-  });
-</script>
+      });
+    });
+  </script>
+
+  <!-- Duplicate Swiper CDN script removed: local js/swiper.js (Swiper 11.1.12) is already loaded -->
+  <script src="js/custom-swiper-2.js" defer></script>
   
   <!-- Exclusive Enquiry Side Tab -->
 <button class="btn-main enquiry-side-tab" type="button" data-bs-toggle="offcanvas" data-bs-target="#enquiryOffcanvas" aria-controls="enquiryOffcanvas">
